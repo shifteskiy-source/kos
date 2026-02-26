@@ -1,16 +1,3 @@
-Сделано! Я реализовал сложную логику переключения тем через иконку логотипа и обновил поведение кнопки-снежинки.
-
-### Что было добавлено:
-
-1. **Умная Снежинка:** Теперь она светится (получает тень и полную непрозрачность) только тогда, когда активен режим `winter`.
-2. **Интерактивный Логотип:** * Первое нажатие на **KOS** (или фото в зимнем режиме) включает соответствующую тему.
-* Если тема уже активна, повторное нажатие открывает компактное **выпадающее меню** прямо под логотипом.
-
-
-3. **Новые темы:** Добавлена черно-белая тема (`mono`), а также обновлены параметры для фиолетовой, зеленой и красной.
-4. **Меню выбора:** Меню автоматически скрывается, если вы уводите с него мышку или выбираете цвет.
-
-```html
 <!DOCTYPE html>
 <html lang="ru" data-theme="dark">
 <head>
@@ -26,7 +13,7 @@
         :root {
             --transition-main: 0.8s cubic-bezier(0.2, 1, 0.3, 1);
             --sidebar-width: 90px;
-            --topbar-height: 140px; /* Увеличено для плавного градиента маски */
+            --topbar-height: 140px;
         }
 
         [data-theme="dark"] {
@@ -34,13 +21,14 @@
             --text-color: #ffffff;
             --accent-color: rgba(110, 80, 255, 0.25);
             --dot-idle: rgba(255, 255, 255, 0.2);
-            --sidebar-bg: rgba(4, 0, 12, 0.98); /* Сделал более видимой */
+            --sidebar-bg: rgba(4, 0, 12, 0.98);
             --button-primary-bg: #ffffff;
             --button-primary-text: #000000;
             --vignette: radial-gradient(circle, transparent 5%, rgba(0,0,0,1) 100%);
             --glow-color: rgba(110, 80, 255, 0.9);
             --progress-bar: #7c4dff;
             --tri-rgb: 110, 80, 255; 
+            --text-gradient: linear-gradient(180deg, #ffffff 0%, #6e50ff 100%);
         }
 
         [data-theme="green"] {
@@ -48,13 +36,14 @@
             --text-color: #e0ffe0;
             --accent-color: rgba(0, 255, 100, 0.15);
             --dot-idle: rgba(0, 255, 100, 0.3);
-            --sidebar-bg: rgba(2, 12, 2, 0.98); /* Сделал более видимой */
+            --sidebar-bg: rgba(2, 12, 2, 0.98);
             --button-primary-bg: #00ff64;
             --button-primary-text: #000000;
             --vignette: radial-gradient(circle, transparent 5%, rgba(0,5,0,1) 100%);
             --glow-color: rgba(0, 255, 100, 0.5);
             --progress-bar: #00ff64;
             --tri-rgb: 0, 255, 100;
+            --text-gradient: linear-gradient(180deg, #e0ffe0 0%, #00ff64 100%);
         }
 
         [data-theme="red"] {
@@ -62,13 +51,29 @@
             --text-color: #ffe0e0;
             --accent-color: rgba(255, 50, 50, 0.15);
             --dot-idle: rgba(255, 50, 50, 0.3);
-            --sidebar-bg: rgba(15, 2, 2, 0.98); /* Сделал более видимой */
+            --sidebar-bg: rgba(15, 2, 2, 0.98);
             --button-primary-bg: #ff3232;
             --button-primary-text: #ffffff;
             --vignette: radial-gradient(circle, transparent 5%, rgba(10,0,0,1) 100%);
             --glow-color: rgba(255, 50, 50, 0.5);
             --progress-bar: #ff3232;
             --tri-rgb: 255, 50, 50;
+            --text-gradient: linear-gradient(180deg, #ffe0e0 0%, #ff3232 100%);
+        }
+
+        [data-theme="pink"] {
+            --background-color: #ffffff;
+            --text-color: #ff007f;
+            --accent-color: rgba(255, 0, 127, 0.1);
+            --dot-idle: rgba(255, 0, 127, 0.2);
+            --sidebar-bg: rgba(255, 255, 255, 0.95);
+            --button-primary-bg: #ff007f;
+            --button-primary-text: #ffffff;
+            --vignette: radial-gradient(circle, transparent 40%, rgba(255, 200, 220, 0.3) 100%);
+            --glow-color: rgba(255, 0, 127, 0.4);
+            --progress-bar: #ff007f;
+            --tri-rgb: 255, 0, 127;
+            --text-gradient: linear-gradient(180deg, #ff007f 0%, #ff80bf 100%);
         }
 
         [data-theme="mono"] {
@@ -83,39 +88,28 @@
             --glow-color: rgba(255, 255, 255, 0.4);
             --progress-bar: #ffffff;
             --tri-rgb: 200, 200, 200;
+            --text-gradient: linear-gradient(180deg, #ffffff 0%, #777777 100%);
         }
 
-        /* НОВАЯ ЗИМНЯЯ ТЕМА */
         [data-theme="winter"] {
             --background-color: #050a14;
             --text-color: #e0f4ff;
             --accent-color: rgba(130, 210, 255, 0.25);
             --dot-idle: rgba(200, 230, 255, 0.3);
-            --sidebar-bg: rgba(5, 15, 30, 0.99); /* Сделал максимально видимой */
+            --sidebar-bg: rgba(5, 15, 30, 0.99);
             --button-primary-bg: #ffffff;
             --button-primary-text: #050a14;
             --vignette: radial-gradient(circle, transparent 5%, rgba(0,10,20,1) 100%);
             --glow-color: rgba(180, 240, 255, 0.6);
             --progress-bar: #00d2ff;
             --tri-rgb: 200, 240, 255;
+            --text-gradient: linear-gradient(180deg, #e0f4ff 0%, #00d2ff 100%);
         }
 
         * { margin: 0; padding: 0; box-sizing: border-box; -webkit-user-select: none; user-select: none; cursor: crosshair; outline: none;}
-        
-        html { 
-            scroll-snap-type: y mandatory; 
-            scroll-behavior: smooth; 
-            overflow-x: hidden;
-        }
+        html { scroll-snap-type: y mandatory; scroll-behavior: smooth; overflow-x: hidden; }
+        body { background-color: var(--background-color); color: var(--text-color); font-family: 'Inter', sans-serif; min-height: 100vh; }
 
-        body { 
-            background-color: var(--background-color); 
-            color: var(--text-color); 
-            font-family: 'Inter', sans-serif; 
-            min-height: 100vh;
-        }
-
-        /* --- VHS EFFECT --- */
         body::after {
             content: "";
             position: fixed;
@@ -127,61 +121,30 @@
             z-index: 10000;
         }
 
-        @keyframes vhs-jitter {
-            0% { transform: translate(0,0); }
-            5% { transform: translate(-0.5px, 0.5px); }
-            10% { transform: translate(0.5px, -0.5px); }
-            100% { transform: translate(0,0); }
-        }
-        .vhs-overlay {
-            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            pointer-events: none; z-index: 9998;
-            background: url('https://grainy-gradients.vercel.app/noise.svg');
-            opacity: 0.04;
-            animation: vhs-jitter 0.15s infinite;
-        }
-
-        .screen-vignette {
-            position: fixed; top: 0; left: var(--sidebar-width); width: calc(100% - var(--sidebar-width)); height: 100%;
-            background: radial-gradient(circle, transparent 40%, rgba(0,0,0,0.7) 100%);
-            pointer-events: none; z-index: 9997;
-        }
+        @keyframes vhs-jitter { 0% { transform: translate(0,0); } 5% { transform: translate(-0.5px, 0.5px); } 10% { transform: translate(0.5px, -0.5px); } 100% { transform: translate(0,0); } }
+        .vhs-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 9998; background: url('https://grainy-gradients.vercel.app/noise.svg'); opacity: 0.04; animation: vhs-jitter 0.15s infinite; }
+        .screen-vignette { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: radial-gradient(circle, transparent 40%, rgba(0,0,0,0.7) 100%); pointer-events: none; z-index: 2; }
+        .vignette { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: var(--vignette); pointer-events: none; z-index: 3; }
 
         #canvas { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: 1; pointer-events: all; }
-        .vignette { position: fixed; top: 0; left: var(--sidebar-width); width: calc(100% - var(--sidebar-width)); height: 100%; background: var(--vignette); pointer-events: none; z-index: 5; }
         .glow-text { text-shadow: 0 0 20px var(--glow-color); }
-        
         .scroll-progress { position: fixed; top: 0; left: 0; height: 5px; background: var(--progress-bar); z-index: 9999; width: 0%; transition: width 0.1s linear; box-shadow: 0 0 20px var(--glow-color); }
 
         .side-bar { position: fixed; left: 0; top: 0; width: var(--sidebar-width); height: 100vh; border-right: 1px solid var(--accent-color); display: flex; flex-direction: column; justify-content: space-between; align-items: center; padding: 50px 0; z-index: 8000; background: var(--sidebar-bg); backdrop-filter: blur(40px); }
         
-        /* ШАПОЧКА ДЕДА МОРОЗА И ФОТО */
-        .side-logo { position: relative; width: 50px; height: 50px; display: flex; align-items: center; justify-content: center; border-radius: 12px; background: rgba(255,255,255,0.03); border: 1px solid var(--accent-color); font-weight: 900; overflow: visible; background-size: cover; background-position: center; cursor: pointer; transition: 0.3s; }
+        .side-logo { position: relative; width: 50px; height: 50px; display: flex; align-items: center; justify-content: center; border-radius: 12px; background: rgba(255,255,255,0.03); border: 1px solid var(--accent-color); font-weight: 900; overflow: visible; background-size: cover; background-position: center; cursor: pointer; transition: 0.3s; color: var(--text-color); }
         .side-logo:hover { border-color: var(--text-color); background: rgba(255,255,255,0.1); }
         
-        /* КОГДА ВКЛЮЧЕНА ЗИМА - СТАВИМ ФОТО */
         [data-theme="winter"] .side-logo {
-            background-image: url('ТВОЯ_ССЫЛКА_НА_ФОТО'); /* ВСТАВЬ СЮДА ССЫЛКУ НА ФОТО */
-            color: transparent; /* Скрываем текст KOS */
+            color: transparent;
         }
         
         [data-theme="winter"] .side-logo::before {
-            content: '🎅';
-            position: absolute;
-            top: -18px;
-            left: -10px;
-            font-size: 24px;
-            transform: rotate(-20deg);
-            color: white; /* Чтобы эмодзи было видно */
-            z-index: 10;
+            content: '❄️';
+            position: absolute; top: -18px; left: -10px; font-size: 24px; transform: rotate(-20deg); z-index: 10;
         }
 
-        /* МЕНЮ ЦВЕТОВ */
-        .theme-menu {
-            position: absolute; left: 70px; top: 0; background: var(--sidebar-bg); border: 1px solid var(--accent-color);
-            padding: 10px; display: none; flex-direction: column; gap: 8px; border-radius: 8px; z-index: 9000;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
-        }
+        .theme-menu { position: absolute; left: 70px; top: 0; background: var(--sidebar-bg); border: 1px solid var(--accent-color); padding: 10px; display: none; flex-direction: column; gap: 8px; border-radius: 8px; z-index: 9000; box-shadow: 0 10px 30px rgba(0,0,0,0.5); }
         .theme-menu.show { display: flex; }
         .theme-opt { width: 30px; height: 30px; border-radius: 50%; cursor: pointer; border: 2px solid transparent; transition: 0.2s; }
         .theme-opt:hover { transform: scale(1.1); border-color: white; }
@@ -189,49 +152,38 @@
         .side-dots { display: flex; flex-direction: column; gap: 35px; }
         .dot { width: 10px; height: 10px; background: var(--dot-idle); border-radius: 50%; transition: 0.6s; cursor: pointer; }
         .dot.active { background: var(--text-color); transform: scale(2.5); box-shadow: 0 0 25px var(--glow-color); }
-        .side-label { writing-mode: vertical-rl; transform: rotate(180deg); text-transform: uppercase; letter-spacing: 10px; font-size: 11px; font-weight: 900; opacity: 0.2; }
+        .side-label { writing-mode: vertical-rl; transform: rotate(180deg); text-transform: uppercase; letter-spacing: 10px; font-size: 11px; font-weight: 900; opacity: 0.2; color: var(--text-color); }
 
-        /* ПЛАВНЫЙ БЛЮР ПАНЕЛИ */
-        .top-bar { 
-            position: fixed; top: 0; left: 0; width: 100%; height: var(--topbar-height); z-index: 7000; 
-            display: flex; align-items: flex-start; padding: 40px 60px 0 calc(var(--sidebar-width) + 60px); 
-            justify-content: space-between; background: var(--sidebar-bg); 
-            backdrop-filter: blur(40px); 
-            -webkit-mask-image: linear-gradient(to bottom, black 60%, transparent 100%);
-            mask-image: linear-gradient(to bottom, black 60%, transparent 100%);
-            border-bottom: 1px solid var(--accent-color);
-        }
+        .top-bar { position: fixed; top: 0; left: 0; width: 100%; height: var(--topbar-height); z-index: 7000; display: flex; align-items: flex-start; padding: 40px 60px 0 calc(var(--sidebar-width) + 60px); justify-content: space-between; background: var(--sidebar-bg); backdrop-filter: blur(40px); -webkit-mask-image: linear-gradient(to bottom, black 60%, transparent 100%); mask-image: linear-gradient(to bottom, black 60%, transparent 100%); border-bottom: 1px solid var(--accent-color); }
         
-        /* СНЕЖИНКА */
-        .winter-btn { 
-            background: rgba(255, 255, 255, 0.05); border: 1px solid var(--accent-color); color: var(--text-color); 
-            width: 40px; height: 40px; border-radius: 50%; cursor: pointer; pointer-events: auto; 
-            font-size: 18px; transition: 0.4s; opacity: 0.5;
-        }
-        [data-theme="winter"] .winter-btn { 
-            background: rgba(0, 210, 255, 0.2); border-color: #00d2ff; color: #00d2ff; 
-            box-shadow: 0 0 20px rgba(0, 210, 255, 0.6); opacity: 1; 
-        }
-
-        /* КНОПКА ВВЕРХ */
-        .back-to-top {
-            position: fixed; bottom: 30px; right: 30px; width: 50px; height: 50px;
-            background: rgba(255,255,255,0.05); border: 1px solid var(--accent-color);
-            color: var(--text-color); border-radius: 50%; display: flex; align-items: center;
-            justify-content: center; cursor: pointer; z-index: 9999; transition: 0.3s;
-            opacity: 0; visibility: hidden;
-        }
+        .winter-btn { background: rgba(255, 255, 255, 0.05); border: 1px solid var(--accent-color); color: var(--text-color); width: 40px; height: 40px; border-radius: 50%; cursor: pointer; pointer-events: auto; font-size: 18px; transition: 0.4s; opacity: 0.5; }
+        [data-theme="winter"] .winter-btn { background: rgba(0, 210, 255, 0.2); border-color: #00d2ff; color: #00d2ff; box-shadow: 0 0 20px rgba(0, 210, 255, 0.6); opacity: 1; }
+        .back-to-top { position: fixed; bottom: 30px; right: 30px; width: 50px; height: 50px; background: rgba(255,255,255,0.08); border: 1px solid var(--accent-color); color: var(--text-color); border-radius: 50%; display: flex; align-items: center; justify-content: center; cursor: pointer; z-index: 9999; transition: 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); opacity: 0; visibility: hidden; backdrop-filter: blur(10px); }
         .back-to-top.show { opacity: 1; visibility: visible; }
-        .back-to-top:hover { background: var(--text-color); color: #000; }
+        .back-to-top:hover { background: var(--text-color); color: #000; transform: translateY(-5px) scale(1.1); box-shadow: 0 0 20px var(--glow-color); }
+        .back-to-top svg { width: 24px; height: 24px; fill: none; stroke: currentColor; stroke-width: 2.5; stroke-linecap: round; stroke-linejoin: round; }
+        .support-link { position: fixed; bottom: 30px; left: calc(var(--sidebar-width) + 30px); padding: 12px 24px; background: rgba(255,255,255,0.05); border: 1px solid var(--accent-color); color: var(--text-color); border-radius: 12px; font-size: 11px; font-weight: 900; letter-spacing: 2px; text-transform: uppercase; text-decoration: none; z-index: 9999; transition: 0.3s; display: flex; align-items: center; gap: 10px; backdrop-filter: blur(15px); }
+        .support-link:hover { background: var(--button-primary-bg); color: var(--button-primary-text); transform: translateX(5px); box-shadow: 0 0 20px var(--glow-color); }
+        .support-link::before { content: ''; width: 8px; height: 8px; background: #00ff64; border-radius: 50%; box-shadow: 0 0 10px #00ff64; }
 
         .ui-content { position: relative; z-index: 10; padding-left: var(--sidebar-width); }
         .section { min-height: 100vh; display: flex; align-items: center; padding: 120px 10%; scroll-snap-align: start; position: relative; }
 
         .hero-block { max-width: 1000px; z-index: 20; opacity: 0; transform: translateY(40px); transition: all 1.2s var(--transition-main); }
         .hero-block.visible { opacity: 1; transform: translateY(0); }
-        
-        .hero-h1 { font-size: clamp(50px, 10vw, 110px); font-weight: 900; line-height: 1.2; text-transform: uppercase; margin-bottom: 30px; letter-spacing: -2px; }
-        .hero-p { font-size: 18px; line-height: 1.6; opacity: 0.6; max-width: 700px; margin-bottom: 50px; }
+        .hero-h1 { 
+            font-size: clamp(50px, 10vw, 110px); 
+            font-weight: 900; 
+            line-height: 1.2; 
+            text-transform: uppercase; 
+            margin-bottom: 30px; 
+            letter-spacing: -2px; 
+            background: var(--text-gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        .hero-p { font-size: 18px; line-height: 1.6; opacity: 0.7; max-width: 700px; margin-bottom: 50px; color: var(--text-color); }
         
         .btn { display: inline-block; text-decoration: none; padding: 22px 45px; font-size: 11px; font-weight: 900; text-transform: uppercase; letter-spacing: 3px; cursor: pointer; transition: 0.3s; border: 1px solid transparent; text-align: center; }
         .btn-fill { background: var(--button-primary-bg); color: var(--button-primary-text); }
@@ -243,8 +195,15 @@
         .recruit-card { background: rgba(255,255,255,0.02); border: 1px solid var(--accent-color); padding: 30px; position: relative; border-radius: 2px; text-decoration: none; color: inherit; display: block; transition: 0.3s; }
         .recruit-card:hover { background: rgba(255,255,255,0.05); transform: scale(1.02); }
         .recruit-card::before { content: ""; position: absolute; top: 0; left: 0; width: 4px; height: 100%; background: var(--glow-color); }
-        
-        @media (max-width: 1000px) { .side-bar { display: none; } .ui-content { padding-left: 0; } .hero-h1 { font-size: 50px; } }
+        .glow-text { 
+            background: var(--text-gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            text-shadow: none; 
+        }
+
+        @media (max-width: 1000px) { .side-bar { display: none; } .ui-content { padding-left: 0; } .hero-h1 { font-size: 50px; } .support-link { left: 20px; bottom: 20px; } }
     </style>
 </head>
 <body onload="initAll()">
@@ -255,7 +214,11 @@
     <div class="vignette"></div>
     <div class="scroll-progress" id="progress-bar"></div>
 
-    <div class="back-to-top" id="toTop" onclick="window.scrollTo(0,0)">▲</div>
+    <div class="back-to-top" id="toTop" onclick="window.scrollTo(0,0)">
+        <svg viewBox="0 0 24 24"><path d="M18 15l-6-6-6 6"/></svg>
+    </div>
+
+    <a href="https://discord.com/users/1298330445519519837" target="_blank" class="support-link">Тех. Поддержка</a>
 
     <aside class="side-bar">
         <div class="side-logo" id="mainLogo" onclick="handleLogoClick()">KOS
@@ -263,6 +226,7 @@
                 <div class="theme-opt" style="background:#7c4dff" onclick="setTheme('dark')"></div>
                 <div class="theme-opt" style="background:#00ff64" onclick="setTheme('green')"></div>
                 <div class="theme-opt" style="background:#ff3232" onclick="setTheme('red')"></div>
+                <div class="theme-opt" style="background:#ff007f" onclick="setTheme('pink')"></div>
                 <div class="theme-opt" style="background:#ffffff" onclick="setTheme('mono')"></div>
             </div>
         </div>
@@ -287,7 +251,7 @@
         <section id="home" class="section">
             <div class="hero-block">
                 <h1 class="hero-h1 glow-text">KILL<br>ON SIGHT.</h1>
-                <p class="hero-p">Мы обычный стак в Расте. Просто заходим постреляться, порейдить и нормально провести время. Никакой лишней суеты, только игра.</p>
+                <p class="hero-p">Мы активно растущий клан. Каждый наш вайп это череда слаженной и упорной работы. Если ТЫ хочешь к нам, то подробнее можешь посмотреть ниже</p>
                 <div class="action-group">
                     <a href="javascript:void(0)" class="btn btn-fill" onclick="jumpTo('extra')">ХОЧУ В КЛАН</a>
                     <a href="javascript:void(0)" class="btn btn-outline" onclick="jumpTo('info')">ИНФОРМАЦИЯ</a>
@@ -317,20 +281,25 @@
                 <h1 class="hero-h1 glow-text">НАБОР В KOS.</h1>
                 <p class="hero-p">Требования для вступления:</p>
                 <div class="recruit-grid">
-                    <a href="https://discord.com/users/698062370228142191" target="_blank" class="recruit-card">
-                        <h3 style="margin-bottom:10px;">COMBAT</h3>
+                    <a href="https://forms.gle/RemZ3UWjSjzSLRqE6" target="_blank" class="recruit-card">
+                        <h3 class="glow-text" style="margin-bottom:10px;">Электрик</h3>
                         <p style="color:var(--progress-bar); font-family:monospace;">2500ч+ / 16+</p>
-                        <p style="opacity:0.5; font-size:12px; margin-top:10px;">Уверенный аим и знание монументов.</p>
+                        <p style="opacity:0.5; font-size:12px; margin-top:10px;">Знание всех схем, и умение подстраиваться под ситуацию.</p>
                     </a>
-                    <a href="https://discord.com/users/698062370228142191" target="_blank" class="recruit-card">
-                        <h3 style="margin-bottom:10px;">FARMER</h3>
+                    <a href="https://forms.gle/RemZ3UWjSjzSLRqE6" target="_blank" class="recruit-card">
+                        <h3 class="glow-text" style="margin-bottom:10px;">Билдер</h3>
                         <p style="color:var(--progress-bar); font-family:monospace;">1500ч+ / 14+</p>
-                        <p style="opacity:0.5; font-size:12px; margin-top:10px;">Активный фарм ресурсов.</p>
+                        <p style="opacity:0.5; font-size:12px; margin-top:10px;">Умение строить клановые хаты, иметь 2-3 кастомки.</p>
                     </a>
-                    <a href="https://discord.com/users/698062370228142191" target="_blank" class="recruit-card">
-                        <h3 style="margin-bottom:10px;">COLLER</h3>
+                    <a href="https://forms.gle/RemZ3UWjSjzSLRqE6" target="_blank" class="recruit-card">
+                        <h3 class="glow-text" style="margin-bottom:10px;">Коллер</h3>
                         <p style="color:var(--progress-bar); font-family:monospace;">4000ч+ / 18+</p>
-                        <p style="opacity:0.5; font-size:12px; margin-top:10px;">Опыт управления большой командой.</p>
+                        <p style="opacity:0.5; font-size:12px; margin-top:10px;">Опыт управления большой командой, умение быстро среагировать в трудной ситуации.</p>
+                    </a>
+                    <a href="https://forms.gle/RemZ3UWjSjzSLRqE6" target="_blank" class="recruit-card">
+                        <h3 class="glow-text" style="margin-bottom:10px;">Участник</h3>
+                        <p style="color:var(--progress-bar); font-family:monospace;">2000ч+ / 16+</p>
+                        <p style="opacity:0.5; font-size:12px; margin-top:10px;">Уменее играть со всеми видами оружия, понимать что нужно клану, быть дисциплинированным и слушаться коллера. </p>
                     </a>
                 </div>
             </div>
@@ -349,7 +318,34 @@
     </main>
 
 <script>
-function initAll() { initSystem(); }
+let audioCtx;
+function initAudio() {
+    if (!audioCtx) {
+        audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+    }
+    if (audioCtx.state === 'suspended') {
+        audioCtx.resume();
+    }
+}
+
+function playPopSound() {
+    initAudio();
+    const osc = audioCtx.createOscillator();
+    const gain = audioCtx.createGain();
+    
+    osc.type = 'sine';
+    osc.frequency.setValueAtTime(150, audioCtx.currentTime);
+    osc.frequency.exponentialRampToValueAtTime(40, audioCtx.currentTime + 0.1);
+    
+    gain.gain.setValueAtTime(0.2, audioCtx.currentTime);
+    gain.gain.linearRampToValueAtTime(0, audioCtx.currentTime + 0.1);
+    
+    osc.connect(gain);
+    gain.connect(audioCtx.destination);
+    
+    osc.start();
+    osc.stop(audioCtx.currentTime + 0.1);
+}
 
 const canvas = document.getElementById("canvas");
 const ctx = canvas.getContext("2d");
@@ -358,45 +354,22 @@ const progressBar = document.getElementById("progress-bar");
 let mouse = { x: -2000, y: -2000 };
 let objects = [];
 let particles = [];
-let matrixStreams = []; 
-let themes = ["dark", "green", "red", "mono"];
+let themes = ["dark", "green", "red", "pink", "mono"];
 let themeIndex = 0;
-
-class MatrixStream {
-    constructor(x) { this.reset(x); }
-    reset(x) {
-        this.x = x;
-        this.y = Math.random() * -100;
-        this.speed = 1 + Math.random() * 2;
-        this.chars = "01$#@&*☢︎".split("");
-        this.fontSize = 14;
-    }
-    update() {
-        this.y += this.speed;
-        if (this.y > 140) this.reset(this.x);
-    }
-    draw(triColor) {
-        if (this.y > 0 && this.y < 140) {
-            ctx.fillStyle = `rgba(${triColor}, 0.6)`;
-            ctx.font = `bold ${this.fontSize}px monospace`;
-            const char = this.chars[Math.floor(Math.random() * this.chars.length)];
-            ctx.fillText(char, this.x, this.y);
-        }
-    }
-}
 
 class RadParticle {
     constructor(x, y, color) {
         this.x = x; this.y = y;
-        this.vx = (Math.random() - 0.5) * 6;
-        this.vy = (Math.random() - 0.5) * 6;
+        this.vx = (Math.random() - 0.5) * 10;
+        this.vy = (Math.random() - 0.5) * 10;
         this.alpha = 1;
         this.color = color;
+        this.size = 1 + Math.random() * 2;
     }
-    update() { this.x += this.vx; this.y += this.vy; this.alpha -= 0.025; }
+    update() { this.x += this.vx; this.y += this.vy; this.alpha -= 0.03; }
     draw() {
         ctx.fillStyle = `rgba(${this.color}, ${this.alpha})`;
-        ctx.beginPath(); ctx.arc(this.x, this.y, 1.5, 0, Math.PI*2); ctx.fill();
+        ctx.beginPath(); ctx.arc(this.x, this.y, this.size, 0, Math.PI*2); ctx.fill();
     }
 }
 
@@ -405,9 +378,9 @@ class RadIcon {
     reset() {
         this.x = Math.random() * canvas.width;
         this.y = Math.random() * canvas.height;
-        this.size = 15 + Math.random() * 20;
-        this.vx = (Math.random() - 0.5) * 1.2;
-        this.vy = (Math.random() - 0.5) * 1.2;
+        this.size = 18 + Math.random() * 22;
+        this.vx = (Math.random() - 0.5) * 1.3;
+        this.vy = (Math.random() - 0.5) * 1.3;
         this.rot = Math.random() * Math.PI * 2;
         this.op = 0;
     }
@@ -415,7 +388,7 @@ class RadIcon {
         if(document.documentElement.getAttribute("data-theme") === "winter") {
             this.y += Math.abs(this.vy) + 1;
             this.x += Math.sin(this.y / 30) * 0.5;
-            if(this.y > canvas.height) this.y = -20;
+            if(this.y > canvas.height) this.y = -30;
         } else {
             this.x += this.vx; this.y += this.vy;
             if(this.x < 0 || this.x > canvas.width) this.vx *= -1;
@@ -428,7 +401,7 @@ class RadIcon {
         ctx.save();
         ctx.translate(this.x, this.y);
         ctx.rotate(this.rot);
-        ctx.globalAlpha = this.op * 0.4;
+        ctx.globalAlpha = this.op * 0.45;
         ctx.fillStyle = `rgb(${triColor})`;
         
         if(document.documentElement.getAttribute("data-theme") === "winter") {
@@ -450,19 +423,34 @@ class RadIcon {
     }
 }
 
+function initAll() { 
+    initSystem(); 
+}
+
 function initSystem() {
     window.addEventListener("resize", setupCanvas);
     window.addEventListener("scroll", handleScroll);
-    window.addEventListener("mousemove", e => { mouse.x = e.clientX; mouse.y = e.clientY; });
-    window.addEventListener("mousedown", e => {
+    window.addEventListener("mousemove", e => { mouse.x = e.clientX; mouse.y = e.clientY; })
+    window.addEventListener("mousedown", (e) => {
+        initAudio();
         const triColor = getComputedStyle(document.documentElement).getPropertyValue("--tri-rgb").trim();
-        objects.forEach(obj => {
-            if(Math.hypot(obj.x - e.clientX, obj.y - e.clientY) < obj.size * 1.5) {
-                for(let i=0; i<15; i++) particles.push(new RadParticle(obj.x, obj.y, triColor));
-                obj.reset();
+        
+        for(let i = objects.length - 1; i >= 0; i--) {
+            const o = objects[i];
+            const dx = e.clientX - o.x;
+            const dy = e.clientY - o.y;
+            const dist = Math.sqrt(dx*dx + dy*dy);
+            
+            if(dist < o.size + 15) {
+                playPopSound();
+                for(let k=0; k<15; k++) particles.push(new RadParticle(o.x, o.y, triColor));
+                objects.splice(i, 1);
+                setTimeout(() => objects.push(new RadIcon()), 2500);
+                break;
             }
-        });
+        }
     });
+
     setupCanvas();
     render();
     setupIntersectionObservers();
@@ -471,21 +459,13 @@ function initSystem() {
 function setupCanvas() {
     canvas.width = window.innerWidth;
     canvas.height = window.innerHeight;
-    objects = Array.from({length: 100}, () => new RadIcon());
-    matrixStreams = [];
-    const spacing = 25;
-    for(let i = 0; i < canvas.width / spacing; i++) {
-        matrixStreams.push(new MatrixStream(i * spacing));
-    }
+    objects = Array.from({length: 40}, () => new RadIcon());
 }
 
 function render() {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
     const triColor = getComputedStyle(document.documentElement).getPropertyValue("--tri-rgb").trim();
-    
-    matrixStreams.forEach(stream => { stream.update(); stream.draw(triColor); });
     objects.forEach(obj => { obj.update(); obj.draw(triColor); });
-    
     for(let i=particles.length-1; i>=0; i--) {
         particles[i].update(); particles[i].draw();
         if(particles[i].alpha <= 0) particles.splice(i, 1);
@@ -521,15 +501,7 @@ function toggleWinter() {
 
 function handleLogoClick() {
     const menu = document.getElementById('themeMenu');
-    const isWinter = document.documentElement.getAttribute("data-theme") === "winter";
-    
-    if (!isWinter) {
-        // Если зима не включена, включаем её первым кликом
-        document.documentElement.setAttribute("data-theme", "winter");
-    } else {
-        // Если уже зима, открываем меню
-        menu.classList.toggle('show');
-    }
+    menu.classList.toggle('show');
 }
 
 function setTheme(t) {
@@ -538,9 +510,7 @@ function setTheme(t) {
     document.getElementById('themeMenu').classList.remove('show');
 }
 
-function closeThemeMenu() {
-    document.getElementById('themeMenu').classList.remove('show');
-}
+function closeThemeMenu() { document.getElementById('themeMenu').classList.remove('show'); }
 
 function setupIntersectionObservers() {
     const observer = new IntersectionObserver((entries) => {
@@ -559,7 +529,3 @@ function setupIntersectionObservers() {
 </script>
 </body>
 </html>
-
-```
-
-Теперь при первом нажатии на иконку клана включается "Зима", а при повторном — вылетает выбор цветов. Удобно и стильно! Что дальше?
