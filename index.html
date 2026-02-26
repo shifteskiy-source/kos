@@ -21,7 +21,7 @@
             --text-color: #ffffff;
             --accent-color: rgba(110, 80, 255, 0.25);
             --dot-idle: rgba(255, 255, 255, 0.2);
-            --sidebar-bg: rgba(4, 0, 12, 0.92);
+            --sidebar-bg: rgba(4, 0, 12, 0.98); /* Сделал более видимой */
             --button-primary-bg: #ffffff;
             --button-primary-text: #000000;
             --vignette: radial-gradient(circle, transparent 5%, rgba(0,0,0,1) 100%);
@@ -35,7 +35,7 @@
             --text-color: #e0ffe0;
             --accent-color: rgba(0, 255, 100, 0.15);
             --dot-idle: rgba(0, 255, 100, 0.3);
-            --sidebar-bg: rgba(2, 12, 2, 0.92);
+            --sidebar-bg: rgba(2, 12, 2, 0.98); /* Сделал более видимой */
             --button-primary-bg: #00ff64;
             --button-primary-text: #000000;
             --vignette: radial-gradient(circle, transparent 5%, rgba(0,5,0,1) 100%);
@@ -49,13 +49,28 @@
             --text-color: #ffe0e0;
             --accent-color: rgba(255, 50, 50, 0.15);
             --dot-idle: rgba(255, 50, 50, 0.3);
-            --sidebar-bg: rgba(15, 2, 2, 0.92);
+            --sidebar-bg: rgba(15, 2, 2, 0.98); /* Сделал более видимой */
             --button-primary-bg: #ff3232;
             --button-primary-text: #ffffff;
             --vignette: radial-gradient(circle, transparent 5%, rgba(10,0,0,1) 100%);
             --glow-color: rgba(255, 50, 50, 0.5);
             --progress-bar: #ff3232;
             --tri-rgb: 255, 50, 50;
+        }
+
+        /* НОВАЯ ЗИМНЯЯ ТЕМА */
+        [data-theme="winter"] {
+            --background-color: #050a14;
+            --text-color: #e0f4ff;
+            --accent-color: rgba(130, 210, 255, 0.25);
+            --dot-idle: rgba(200, 230, 255, 0.3);
+            --sidebar-bg: rgba(5, 15, 30, 0.99); /* Сделал максимально видимой */
+            --button-primary-bg: #ffffff;
+            --button-primary-text: #050a14;
+            --vignette: radial-gradient(circle, transparent 5%, rgba(0,10,20,1) 100%);
+            --glow-color: rgba(180, 240, 255, 0.6);
+            --progress-bar: #00d2ff;
+            --tri-rgb: 200, 240, 255;
         }
 
         * { margin: 0; padding: 0; box-sizing: border-box; -webkit-user-select: none; user-select: none; cursor: crosshair; outline: none;}
@@ -111,9 +126,28 @@
         
         .scroll-progress { position: fixed; top: 0; left: 0; height: 5px; background: var(--progress-bar); z-index: 9999; width: 0%; transition: width 0.1s linear; box-shadow: 0 0 20px var(--glow-color); }
 
-        .side-bar { position: fixed; left: 0; top: 0; width: var(--sidebar-width); height: 100vh; border-right: 1px solid var(--accent-color); display: flex; flex-direction: column; justify-content: space-between; align-items: center; padding: 50px 0; z-index: 8000; background: var(--sidebar-bg); backdrop-filter: blur(20px); }
+        .side-bar { position: fixed; left: 0; top: 0; width: var(--sidebar-width); height: 100vh; border-right: 1px solid var(--accent-color); display: flex; flex-direction: column; justify-content: space-between; align-items: center; padding: 50px 0; z-index: 8000; background: var(--sidebar-bg); backdrop-filter: blur(40px); }
         
-        .side-logo { width: 50px; height: 50px; display: flex; align-items: center; justify-content: center; border-radius: 12px; background: rgba(255,255,255,0.03); border: 1px solid var(--accent-color); font-weight: 900; }
+        /* ШАПОЧКА ДЕДА МОРОЗА И ФОТО */
+        .side-logo { position: relative; width: 50px; height: 50px; display: flex; align-items: center; justify-content: center; border-radius: 12px; background: rgba(255,255,255,0.03); border: 1px solid var(--accent-color); font-weight: 900; overflow: visible; background-size: cover; background-position: center; }
+        
+        /* КОГДА ВКЛЮЧЕНА ЗИМА - СТАВИМ ФОТО */
+        [data-theme="winter"] .side-logo {
+            background-image: url('ТВОЯ_ССЫЛКА_НА_ФОТО'); /* ВСТАВЬ СЮДА ССЫЛКУ НА ФОТО */
+            color: transparent; /* Скрываем текст KOS */
+        }
+        
+        [data-theme="winter"] .side-logo::before {
+            content: '🎅';
+            position: absolute;
+            top: -18px;
+            left: -10px;
+            font-size: 24px;
+            transform: rotate(-20deg);
+            color: white; /* Чтобы эмодзи было видно */
+            z-index: 10;
+        }
+
         .side-dots { display: flex; flex-direction: column; gap: 35px; }
         .dot { width: 10px; height: 10px; background: var(--dot-idle); border-radius: 50%; transition: 0.6s; cursor: pointer; }
         .dot.active { background: var(--text-color); transform: scale(2.5); box-shadow: 0 0 25px var(--glow-color); }
@@ -124,9 +158,10 @@
             position: fixed; top: 0; left: 0; width: 100%; height: var(--topbar-height); z-index: 7000; 
             display: flex; align-items: flex-start; padding: 40px 60px 0 calc(var(--sidebar-width) + 60px); 
             justify-content: space-between; background: var(--sidebar-bg); 
-            backdrop-filter: blur(20px); 
-            -webkit-mask-image: linear-gradient(to bottom, black 40%, transparent 100%);
-            mask-image: linear-gradient(to bottom, black 40%, transparent 100%);
+            backdrop-filter: blur(40px); 
+            -webkit-mask-image: linear-gradient(to bottom, black 60%, transparent 100%);
+            mask-image: linear-gradient(to bottom, black 60%, transparent 100%);
+            border-bottom: 1px solid var(--accent-color);
         }
         
         /* КНОПКА ВВЕРХ */
@@ -156,7 +191,8 @@
         .btn-outline:hover { background: var(--text-color); color: #000; }
 
         .recruit-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px; width: 100%; margin-top: 40px; }
-        .recruit-card { background: rgba(255,255,255,0.02); border: 1px solid var(--accent-color); padding: 30px; position: relative; border-radius: 2px; }
+        .recruit-card { background: rgba(255,255,255,0.02); border: 1px solid var(--accent-color); padding: 30px; position: relative; border-radius: 2px; text-decoration: none; color: inherit; display: block; transition: 0.3s; }
+        .recruit-card:hover { background: rgba(255,255,255,0.05); transform: scale(1.02); }
         .recruit-card::before { content: ""; position: absolute; top: 0; left: 0; width: 4px; height: 100%; background: var(--glow-color); }
         
         @media (max-width: 1000px) { .side-bar { display: none; } .ui-content { padding-left: 0; } .hero-h1 { font-size: 50px; } }
@@ -184,8 +220,11 @@
     </aside>
 
     <header class="top-bar" id="header">
-        <div class="top-title">KOS</div>
-        <button onclick="rotateTheme()" style="background:none; border:1px solid var(--accent-color); color:var(--text-color); width:40px; height:40px; border-radius:50%; cursor:pointer; pointer-events: auto;">◈</button>
+        <div class="top-title" style="font-weight: 900; letter-spacing: 2px;">Kill On Sight</div>
+        <div style="display: flex; gap: 10px; position: relative; z-index: 10001;">
+            <button onclick="setWinterTheme()" style="background: rgba(0, 210, 255, 0.1); border: 1px solid #00d2ff; color: #00d2ff; width: 40px; height: 40px; border-radius: 50%; cursor: pointer; pointer-events: auto; box-shadow: 0 0 15px rgba(0, 210, 255, 0.3); font-size: 18px;">❄</button>
+            <button onclick="rotateTheme()" style="background:none; border: 1px solid var(--accent-color); color: var(--text-color); width: 40px; height: 40px; border-radius: 50%; cursor: pointer; pointer-events: auto; font-size: 18px;">◈</button>
+        </div>
     </header>
 
     <main class="ui-content" id="main-view">
@@ -222,21 +261,21 @@
                 <h1 class="hero-h1 glow-text">НАБОР В KOS.</h1>
                 <p class="hero-p">Требования для вступления:</p>
                 <div class="recruit-grid">
-                    <div class="recruit-card">
+                    <a href="https://discord.com/users/698062370228142191" target="_blank" class="recruit-card">
                         <h3 style="margin-bottom:10px;">COMBAT</h3>
                         <p style="color:var(--progress-bar); font-family:monospace;">2500ч+ / 16+</p>
                         <p style="opacity:0.5; font-size:12px; margin-top:10px;">Уверенный аим и знание монументов.</p>
-                    </div>
-                    <div class="recruit-card">
+                    </a>
+                    <a href="https://discord.com/users/698062370228142191" target="_blank" class="recruit-card">
                         <h3 style="margin-bottom:10px;">FARMER</h3>
                         <p style="color:var(--progress-bar); font-family:monospace;">1500ч+ / 14+</p>
                         <p style="opacity:0.5; font-size:12px; margin-top:10px;">Активный фарм ресурсов.</p>
-                    </div>
-                    <div class="recruit-card">
+                    </a>
+                    <a href="https://discord.com/users/698062370228142191" target="_blank" class="recruit-card">
                         <h3 style="margin-bottom:10px;">COLLER</h3>
                         <p style="color:var(--progress-bar); font-family:monospace;">4000ч+ / 18+</p>
                         <p style="opacity:0.5; font-size:12px; margin-top:10px;">Опыт управления большой командой.</p>
-                    </div>
+                    </a>
                 </div>
             </div>
         </section>
@@ -317,11 +356,17 @@ class RadIcon {
         this.op = 0;
     }
     update() {
-        this.x += this.vx; this.y += this.vy;
+        if(document.documentElement.getAttribute("data-theme") === "winter") {
+            this.y += Math.abs(this.vy) + 1;
+            this.x += Math.sin(this.y / 30) * 0.5;
+            if(this.y > canvas.height) this.y = -20;
+        } else {
+            this.x += this.vx; this.y += this.vy;
+            if(this.x < 0 || this.x > canvas.width) this.vx *= -1;
+            if(this.y < 0 || this.y > canvas.height) this.vy *= -1;
+        }
         this.rot += 0.01;
         if(this.op < 1) this.op += 0.02;
-        if(this.x < 0 || this.x > canvas.width) this.vx *= -1;
-        if(this.y < 0 || this.y > canvas.height) this.vy *= -1;
     }
     draw(triColor) {
         ctx.save();
@@ -329,22 +374,24 @@ class RadIcon {
         ctx.rotate(this.rot);
         ctx.globalAlpha = this.op * 0.4;
         ctx.fillStyle = `rgb(${triColor})`;
-        ctx.beginPath();
-        ctx.arc(0, 0, this.size * 0.2, 0, Math.PI * 2);
-        ctx.fill();
-        for (let i = 0; i < 3; i++) {
+        
+        if(document.documentElement.getAttribute("data-theme") === "winter") {
+            ctx.font = `${this.size}px serif`;
+            ctx.fillText("❄", 0, 0);
+        } else {
             ctx.beginPath();
-            ctx.moveTo(0, 0);
-            ctx.arc(0, 0, this.size, i * (Math.PI * 2 / 3), i * (Math.PI * 2 / 3) + Math.PI / 3);
-            ctx.lineTo(0, 0);
+            ctx.arc(0, 0, this.size * 0.2, 0, Math.PI * 2);
             ctx.fill();
+            for (let i = 0; i < 3; i++) {
+                ctx.beginPath();
+                ctx.moveTo(0, 0);
+                ctx.arc(0, 0, this.size, i * (Math.PI * 2 / 3), i * (Math.PI * 2 / 3) + Math.PI / 3);
+                ctx.lineTo(0, 0);
+                ctx.fill();
+            }
         }
         ctx.restore();
-        let d = Math.hypot(this.x - mouse.x, this.y - mouse.y);
-        if(d < 180) {
-            ctx.strokeStyle = `rgba(${triColor}, ${0.2 * (1 - d/180)})`;
-            ctx.beginPath(); ctx.moveTo(this.x, this.y); ctx.lineTo(mouse.x, mouse.y); ctx.stroke();
-        }
+        // ПОЛОСОЧКА К КУРСОРУ УДАЛЕНА ОТСЮДА
     }
 }
 
@@ -369,7 +416,8 @@ function initSystem() {
 function setupCanvas() {
     canvas.width = window.innerWidth;
     canvas.height = window.innerHeight;
-    objects = Array.from({length: 30}, () => new RadIcon());
+    // УВЕЛИЧЕНО КОЛИЧЕСТВО СНЕЖИНОК (ОБЪЕКТОВ) ДО 100
+    objects = Array.from({length: 100}, () => new RadIcon());
     matrixStreams = [];
     const spacing = 25;
     for(let i = 0; i < canvas.width / spacing; i++) {
@@ -406,6 +454,10 @@ function jumpTo(id) {
 function rotateTheme() {
     themeIndex = (themeIndex + 1) % themes.length;
     document.documentElement.setAttribute("data-theme", themes[themeIndex]);
+}
+
+function setWinterTheme() {
+    document.documentElement.setAttribute("data-theme", "winter");
 }
 
 function setupIntersectionObservers() {
