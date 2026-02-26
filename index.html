@@ -409,9 +409,6 @@ function navigateTo(page) {
         }, 600);
         
         document.getElementById('link-clans').classList.add('active');
-        if (window.location.protocol !== 'file:') {
-            window.history.pushState({}, '', '/killofsight/default/clans');
-        }
         window.scrollTo({top: 0, behavior: 'smooth'});
     } else {
         clansPage.style.opacity = '0';
@@ -426,9 +423,6 @@ function navigateTo(page) {
         }, 600);
 
         document.getElementById('link-default').classList.add('active');
-        if (window.location.protocol !== 'file:') {
-            window.history.pushState({}, '', '/killofsight/default');
-        }
     }
 }
 
@@ -579,27 +573,31 @@ function setTheme(t) {
     themeIndex = themes.indexOf(t);
 }
 
+function toggleWinter() {
+    const isWinter = document.documentElement.getAttribute("data-theme") === "winter";
+    if (isWinter) {
+        setTheme(themes[0]);
+    } else {
+        setTheme("winter");
+    }
+}
+
+function setupIntersectionObservers() {
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) entry.target.classList.add('visible');
+        });
+    }, { threshold: 0.1 });
+    document.querySelectorAll('.hero-block').forEach(block => observer.observe(block));
+}
+
 function handleLogoClick() {
-    document.getElementById('themeMenu').classList.toggle('show');
+    const menu = document.getElementById('themeMenu');
+    menu.classList.toggle('show');
 }
 
 function closeThemeMenu() {
     document.getElementById('themeMenu').classList.remove('show');
-}
-
-function toggleWinter() {
-    const current = document.documentElement.getAttribute("data-theme");
-    if(current === "winter") setTheme("dark");
-    else setTheme("winter");
-}
-
-function setupIntersectionObservers() {
-    const obs = new IntersectionObserver((entries) => {
-        entries.forEach(entry => {
-            if(entry.isIntersecting) entry.target.classList.add('visible');
-        });
-    }, { threshold: 0.15 });
-    document.querySelectorAll('.hero-block').forEach(el => obs.observe(el));
 }
 </script>
 </body>
