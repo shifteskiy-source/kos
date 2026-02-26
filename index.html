@@ -18,6 +18,7 @@
 
         [data-theme="dark"] {
             --background-color: #010005;
+            --bg-gradient: linear-gradient(135deg, #010005 0%, #050015 100%);
             --text-color: #ffffff;
             --accent-color: rgba(110, 80, 255, 0.25);
             --dot-idle: rgba(255, 255, 255, 0.2);
@@ -28,11 +29,12 @@
             --glow-color: rgba(110, 80, 255, 0.9);
             --progress-bar: #7c4dff;
             --tri-rgb: 110, 80, 255; 
-            --text-gradient: linear-gradient(180deg, #ffffff 0%, #6e50ff 100%);
+            --text-gradient: linear-gradient(180deg, #7c4dff 0%, #ffffff 100%);
         }
 
         [data-theme="green"] {
             --background-color: #020a02;
+            --bg-gradient: linear-gradient(135deg, #020a02 0%, #051505 100%);
             --text-color: #e0ffe0;
             --accent-color: rgba(0, 255, 100, 0.15);
             --dot-idle: rgba(0, 255, 100, 0.3);
@@ -43,11 +45,12 @@
             --glow-color: rgba(0, 255, 100, 0.5);
             --progress-bar: #00ff64;
             --tri-rgb: 0, 255, 100;
-            --text-gradient: linear-gradient(180deg, #e0ffe0 0%, #00ff64 100%);
+            --text-gradient: linear-gradient(180deg, #00ff64 0%, #ffffff 100%);
         }
 
         [data-theme="red"] {
             --background-color: #0a0202;
+            --bg-gradient: linear-gradient(135deg, #0a0202 0%, #150505 100%);
             --text-color: #ffe0e0;
             --accent-color: rgba(255, 50, 50, 0.15);
             --dot-idle: rgba(255, 50, 50, 0.3);
@@ -58,11 +61,28 @@
             --glow-color: rgba(255, 50, 50, 0.5);
             --progress-bar: #ff3232;
             --tri-rgb: 255, 50, 50;
-            --text-gradient: linear-gradient(180deg, #ffe0e0 0%, #ff3232 100%);
+            --text-gradient: linear-gradient(180deg, #ff3232 0%, #ffffff 100%);
+        }
+
+        [data-theme="yellow"] {
+            --background-color: #0a0a00;
+            --bg-gradient: linear-gradient(135deg, #0a0a00 0%, #1a1a05 100%);
+            --text-color: #ffffd0;
+            --accent-color: rgba(255, 255, 0, 0.15);
+            --dot-idle: rgba(255, 255, 0, 0.2);
+            --sidebar-bg: rgba(10, 10, 0, 0.98);
+            --button-primary-bg: #ffff00;
+            --button-primary-text: #000000;
+            --vignette: radial-gradient(circle, transparent 5%, rgba(10,10,0,1) 100%);
+            --glow-color: rgba(255, 255, 0, 0.5);
+            --progress-bar: #ffff00;
+            --tri-rgb: 255, 255, 0;
+            --text-gradient: linear-gradient(180deg, #ffff00 0%, #ffffff 100%);
         }
 
         [data-theme="pink"] {
             --background-color: #ffffff;
+            --bg-gradient: linear-gradient(135deg, #ffffff 0%, #fff0f5 100%);
             --text-color: #ff007f;
             --accent-color: rgba(255, 0, 127, 0.1);
             --dot-idle: rgba(255, 0, 127, 0.2);
@@ -73,11 +93,12 @@
             --glow-color: rgba(255, 0, 127, 0.4);
             --progress-bar: #ff007f;
             --tri-rgb: 255, 0, 127;
-            --text-gradient: linear-gradient(180deg, #ff007f 0%, #ff80bf 100%);
+            --text-gradient: linear-gradient(180deg, #ff007f 0%, #ffffff 100%);
         }
 
         [data-theme="mono"] {
             --background-color: #050505;
+            --bg-gradient: linear-gradient(135deg, #050505 0%, #151515 100%);
             --text-color: #ffffff;
             --accent-color: rgba(255, 255, 255, 0.1);
             --dot-idle: rgba(255, 255, 255, 0.2);
@@ -88,11 +109,12 @@
             --glow-color: rgba(255, 255, 255, 0.4);
             --progress-bar: #ffffff;
             --tri-rgb: 200, 200, 200;
-            --text-gradient: linear-gradient(180deg, #ffffff 0%, #777777 100%);
+            --text-gradient: linear-gradient(180deg, #ffffff 0%, #ffffff 100%);
         }
 
         [data-theme="winter"] {
             --background-color: #050a14;
+            --bg-gradient: linear-gradient(135deg, #050a14 0%, #0a1a2f 100%);
             --text-color: #e0f4ff;
             --accent-color: rgba(130, 210, 255, 0.25);
             --dot-idle: rgba(200, 230, 255, 0.3);
@@ -103,12 +125,12 @@
             --glow-color: rgba(180, 240, 255, 0.6);
             --progress-bar: #00d2ff;
             --tri-rgb: 200, 240, 255;
-            --text-gradient: linear-gradient(180deg, #e0f4ff 0%, #00d2ff 100%);
+            --text-gradient: linear-gradient(180deg, #e0f4ff 0%, #ffffff 100%);
         }
 
         * { margin: 0; padding: 0; box-sizing: border-box; -webkit-user-select: none; user-select: none; cursor: crosshair; outline: none;}
         html { scroll-snap-type: y mandatory; scroll-behavior: smooth; overflow-x: hidden; }
-        body { background-color: var(--background-color); color: var(--text-color); font-family: 'Inter', sans-serif; min-height: 100vh; }
+        body { background: var(--bg-gradient); background-attachment: fixed; color: var(--text-color); font-family: 'Inter', sans-serif; min-height: 100vh; }
 
         body::after {
             content: "";
@@ -123,39 +145,38 @@
 
         @keyframes vhs-jitter { 0% { transform: translate(0,0); } 5% { transform: translate(-0.5px, 0.5px); } 10% { transform: translate(0.5px, -0.5px); } 100% { transform: translate(0,0); } }
         .vhs-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 9998; background: url('https://grainy-gradients.vercel.app/noise.svg'); opacity: 0.04; animation: vhs-jitter 0.15s infinite; }
-        .screen-vignette { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: radial-gradient(circle, transparent 40%, rgba(0,0,0,0.7) 100%); pointer-events: none; z-index: 2; }
-        .vignette { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: var(--vignette); pointer-events: none; z-index: 3; }
+        .screen-vignette { position: fixed; top: 0; left: var(--sidebar-width); width: calc(100% - var(--sidebar-width)); height: 100%; background: radial-gradient(circle, transparent 40%, rgba(0,0,0,0.7) 100%); pointer-events: none; z-index: 9997; }
 
         #canvas { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: 1; pointer-events: all; }
-        .glow-text { text-shadow: 0 0 20px var(--glow-color); }
+        .vignette { position: fixed; top: 0; left: var(--sidebar-width); width: calc(100% - var(--sidebar-width)); height: 100%; background: var(--vignette); pointer-events: none; z-index: 5; }
+        .glow-text { background: var(--text-gradient); -webkit-background-clip: text; -webkit-text-fill-color: transparent; filter: drop-shadow(0 0 10px var(--glow-color)); }
         .scroll-progress { position: fixed; top: 0; left: 0; height: 5px; background: var(--progress-bar); z-index: 9999; width: 0%; transition: width 0.1s linear; box-shadow: 0 0 20px var(--glow-color); }
 
-        .side-bar { position: fixed; left: 0; top: 0; width: var(--sidebar-width); height: 100vh; border-right: 1px solid var(--accent-color); display: flex; flex-direction: column; justify-content: space-between; align-items: center; padding: 50px 0; z-index: 8000; background: var(--sidebar-bg); backdrop-filter: blur(40px); }
+        .side-bar { position: fixed; left: 0; top: 0; width: var(--sidebar-width); height: 100vh; border-right: 1px solid var(--accent-color); display: flex; flex-direction: column; justify-content: space-between; align-items: center; padding: 50px 0; z-index: 8000; background: var(--sidebar-bg); backdrop-filter: blur(40px); box-shadow: 5px 0 25px rgba(0,0,0,0.5); }
+        .side-bar::after { content: ''; position: absolute; right: 0; top: 0; height: 100%; width: 2px; background: linear-gradient(to bottom, transparent, var(--progress-bar), transparent); }
         
-        .side-logo { position: relative; width: 50px; height: 50px; display: flex; align-items: center; justify-content: center; border-radius: 12px; background: rgba(255,255,255,0.03); border: 1px solid var(--accent-color); font-weight: 900; overflow: visible; background-size: cover; background-position: center; cursor: pointer; transition: 0.3s; color: var(--text-color); }
+        .side-logo { position: relative; width: 50px; height: 50px; display: flex; align-items: center; justify-content: center; border-radius: 12px; background: rgba(255,255,255,0.03); border: 1px solid var(--accent-color); font-weight: 900; cursor: pointer; transition: 0.3s; }
         .side-logo:hover { border-color: var(--text-color); background: rgba(255,255,255,0.1); }
         
-        [data-theme="winter"] .side-logo {
-            color: transparent;
-        }
-        
-        [data-theme="winter"] .side-logo::before {
-            content: '❄️';
-            position: absolute; top: -18px; left: -10px; font-size: 24px; transform: rotate(-20deg); z-index: 10;
-        }
+        [data-theme="winter"] .side-logo { color: transparent; }
+        [data-theme="winter"] .side-logo::before { content: '❄️'; position: absolute; top: -18px; left: -10px; font-size: 24px; z-index: 10; }
 
         .theme-menu { position: absolute; left: 70px; top: 0; background: var(--sidebar-bg); border: 1px solid var(--accent-color); padding: 10px; display: none; flex-direction: column; gap: 8px; border-radius: 8px; z-index: 9000; box-shadow: 0 10px 30px rgba(0,0,0,0.5); }
         .theme-menu.show { display: flex; }
         .theme-opt { width: 30px; height: 30px; border-radius: 50%; cursor: pointer; border: 2px solid transparent; transition: 0.2s; }
         .theme-opt:hover { transform: scale(1.1); border-color: white; }
 
-        .side-dots { display: flex; flex-direction: column; gap: 35px; }
+        .side-dots { display: flex; flex-direction: column; gap: 35px; transition: opacity 0.5s ease; }
         .dot { width: 10px; height: 10px; background: var(--dot-idle); border-radius: 50%; transition: 0.6s; cursor: pointer; }
         .dot.active { background: var(--text-color); transform: scale(2.5); box-shadow: 0 0 25px var(--glow-color); }
-        .side-label { writing-mode: vertical-rl; transform: rotate(180deg); text-transform: uppercase; letter-spacing: 10px; font-size: 11px; font-weight: 900; opacity: 0.2; color: var(--text-color); }
+        .side-label { writing-mode: vertical-rl; transform: rotate(180deg); text-transform: uppercase; letter-spacing: 10px; font-size: 11px; font-weight: 900; opacity: 0.2; }
 
         .top-bar { position: fixed; top: 0; left: 0; width: 100%; height: var(--topbar-height); z-index: 7000; display: flex; align-items: flex-start; padding: 40px 60px 0 calc(var(--sidebar-width) + 60px); justify-content: space-between; background: var(--sidebar-bg); backdrop-filter: blur(40px); -webkit-mask-image: linear-gradient(to bottom, black 60%, transparent 100%); mask-image: linear-gradient(to bottom, black 60%, transparent 100%); border-bottom: 1px solid var(--accent-color); }
         
+        .nav-link { font-size: 11px; font-weight: 900; letter-spacing: 2px; text-transform: uppercase; text-decoration: none; color: var(--text-color); opacity: 0.5; transition: 0.3s; cursor: pointer; margin-right: 30px; }
+        .nav-link:hover { opacity: 1; text-shadow: 0 0 10px var(--glow-color); }
+        .nav-link.active { opacity: 1; border-bottom: 2px solid var(--progress-bar); }
+
         .winter-btn { background: rgba(255, 255, 255, 0.05); border: 1px solid var(--accent-color); color: var(--text-color); width: 40px; height: 40px; border-radius: 50%; cursor: pointer; pointer-events: auto; font-size: 18px; transition: 0.4s; opacity: 0.5; }
         [data-theme="winter"] .winter-btn { background: rgba(0, 210, 255, 0.2); border-color: #00d2ff; color: #00d2ff; box-shadow: 0 0 20px rgba(0, 210, 255, 0.6); opacity: 1; }
         .back-to-top { position: fixed; bottom: 30px; right: 30px; width: 50px; height: 50px; background: rgba(255,255,255,0.08); border: 1px solid var(--accent-color); color: var(--text-color); border-radius: 50%; display: flex; align-items: center; justify-content: center; cursor: pointer; z-index: 9999; transition: 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); opacity: 0; visibility: hidden; backdrop-filter: blur(10px); }
@@ -166,24 +187,13 @@
         .support-link:hover { background: var(--button-primary-bg); color: var(--button-primary-text); transform: translateX(5px); box-shadow: 0 0 20px var(--glow-color); }
         .support-link::before { content: ''; width: 8px; height: 8px; background: #00ff64; border-radius: 50%; box-shadow: 0 0 10px #00ff64; }
 
-        .ui-content { position: relative; z-index: 10; padding-left: var(--sidebar-width); }
+        .ui-content { position: relative; z-index: 10; padding-left: var(--sidebar-width); opacity: 0; transition: opacity 0.6s ease, visibility 0.6s ease; }
         .section { min-height: 100vh; display: flex; align-items: center; padding: 120px 10%; scroll-snap-align: start; position: relative; }
 
         .hero-block { max-width: 1000px; z-index: 20; opacity: 0; transform: translateY(40px); transition: all 1.2s var(--transition-main); }
         .hero-block.visible { opacity: 1; transform: translateY(0); }
-        .hero-h1 { 
-            font-size: clamp(50px, 10vw, 110px); 
-            font-weight: 900; 
-            line-height: 1.2; 
-            text-transform: uppercase; 
-            margin-bottom: 30px; 
-            letter-spacing: -2px; 
-            background: var(--text-gradient);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-        }
-        .hero-p { font-size: 18px; line-height: 1.6; opacity: 0.7; max-width: 700px; margin-bottom: 50px; color: var(--text-color); }
+        .hero-h1 { font-size: clamp(50px, 10vw, 110px); font-weight: 900; line-height: 1.2; text-transform: uppercase; margin-bottom: 30px; letter-spacing: -2px; }
+        .hero-p { font-size: 18px; line-height: 1.6; opacity: 0.6; max-width: 700px; margin-bottom: 50px; }
         
         .btn { display: inline-block; text-decoration: none; padding: 22px 45px; font-size: 11px; font-weight: 900; text-transform: uppercase; letter-spacing: 3px; cursor: pointer; transition: 0.3s; border: 1px solid transparent; text-align: center; }
         .btn-fill { background: var(--button-primary-bg); color: var(--button-primary-text); }
@@ -192,16 +202,13 @@
         .btn-outline:hover { background: var(--text-color); color: #000; }
 
         .recruit-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px; width: 100%; margin-top: 40px; }
-        .recruit-card { background: rgba(255,255,255,0.02); border: 1px solid var(--accent-color); padding: 30px; position: relative; border-radius: 2px; text-decoration: none; color: inherit; display: block; transition: 0.3s; }
-        .recruit-card:hover { background: rgba(255,255,255,0.05); transform: scale(1.02); }
-        .recruit-card::before { content: ""; position: absolute; top: 0; left: 0; width: 4px; height: 100%; background: var(--glow-color); }
-        .glow-text { 
-            background: var(--text-gradient);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-            text-shadow: none; 
-        }
+        .recruit-card { background: var(--text-gradient); padding: 1px; position: relative; border-radius: 4px; text-decoration: none; color: inherit; display: block; transition: 0.3s; }
+        .recruit-card-inner { background: var(--background-color); padding: 30px; border-radius: 4px; height: 100%; transition: 0.3s; }
+        .recruit-card:hover .recruit-card-inner { background: transparent; }
+        .recruit-card:hover { transform: translateY(-5px) scale(1.02); box-shadow: 0 10px 30px var(--glow-color); }
+        
+        #page-default, #page-clans { display: none; }
+        .view-active { display: block !important; opacity: 1; }
 
         @media (max-width: 1000px) { .side-bar { display: none; } .ui-content { padding-left: 0; } .hero-h1 { font-size: 50px; } .support-link { left: 20px; bottom: 20px; } }
     </style>
@@ -226,11 +233,12 @@
                 <div class="theme-opt" style="background:#7c4dff" onclick="setTheme('dark')"></div>
                 <div class="theme-opt" style="background:#00ff64" onclick="setTheme('green')"></div>
                 <div class="theme-opt" style="background:#ff3232" onclick="setTheme('red')"></div>
+                <div class="theme-opt" style="background:#ffff00" onclick="setTheme('yellow')"></div>
                 <div class="theme-opt" style="background:#ff007f" onclick="setTheme('pink')"></div>
                 <div class="theme-opt" style="background:#ffffff" onclick="setTheme('mono')"></div>
             </div>
         </div>
-        <div class="side-dots">
+        <div class="side-dots" id="sidebar-dots">
             <div class="dot active" data-ref="home" onclick="jumpTo('home')"></div>
             <div class="dot" data-ref="info" onclick="jumpTo('info')"></div>
             <div class="dot" data-ref="extra" onclick="jumpTo('extra')"></div>
@@ -240,14 +248,20 @@
     </aside>
 
     <header class="top-bar" id="header">
-        <div class="top-title" style="font-weight: 900; letter-spacing: 2px;">Kill On Sight</div>
+        <div style="display: flex; align-items: center;">
+            <div class="top-title" style="font-weight: 900; letter-spacing: 2px; margin-right: 40px; cursor: pointer;" onclick="navigateTo('default')">Kill On Sight</div>
+            <nav style="display: flex;">
+                <a class="nav-link" id="link-default" onclick="navigateTo('default')">Главная</a>
+                <a class="nav-link" id="link-clans" onclick="navigateTo('clans')">Другие кланы</a>
+            </nav>
+        </div>
         <div style="display: flex; gap: 10px; position: relative; z-index: 10001;">
             <button class="winter-btn" onclick="toggleWinter()">❄</button>
             <button onclick="rotateTheme()" style="background:none; border: 1px solid var(--accent-color); color: var(--text-color); width: 40px; height: 40px; border-radius: 50%; cursor: pointer; pointer-events: auto; font-size: 18px;">◈</button>
         </div>
     </header>
 
-    <main class="ui-content" id="main-view">
+    <main class="ui-content view-active" id="page-default">
         <section id="home" class="section">
             <div class="hero-block">
                 <h1 class="hero-h1 glow-text">KILL<br>ON SIGHT.</h1>
@@ -281,25 +295,33 @@
                 <h1 class="hero-h1 glow-text">НАБОР В KOS.</h1>
                 <p class="hero-p">Требования для вступления:</p>
                 <div class="recruit-grid">
-                    <a href="https://forms.gle/RemZ3UWjSjzSLRqE6" target="_blank" class="recruit-card">
-                        <h3 class="glow-text" style="margin-bottom:10px;">Электрик</h3>
-                        <p style="color:var(--progress-bar); font-family:monospace;">2500ч+ / 16+</p>
-                        <p style="opacity:0.5; font-size:12px; margin-top:10px;">Знание всех схем, и умение подстраиваться под ситуацию.</p>
+                    <a href="https://discord.gg/pgnE8JDNMN" target="_blank" class="recruit-card">
+                        <div class="recruit-card-inner">
+                            <h3 class="glow-text" style="margin-bottom:10px;">Электрик</h3>
+                            <p style="color:var(--progress-bar); font-family:monospace;">2500ч+ / 16+</p>
+                            <p style="opacity:0.5; font-size:12px; margin-top:10px;">Знание всех схем, и умение подстраиваться под ситуацию.</p>
+                        </div>
                     </a>
-                    <a href="https://forms.gle/RemZ3UWjSjzSLRqE6" target="_blank" class="recruit-card">
-                        <h3 class="glow-text" style="margin-bottom:10px;">Билдер</h3>
-                        <p style="color:var(--progress-bar); font-family:monospace;">1500ч+ / 14+</p>
-                        <p style="opacity:0.5; font-size:12px; margin-top:10px;">Умение строить клановые хаты, иметь 2-3 кастомки.</p>
+                    <a href="https://discord.gg/pgnE8JDNMN" target="_blank" class="recruit-card">
+                        <div class="recruit-card-inner">
+                            <h3 class="glow-text" style="margin-bottom:10px;">Билдер</h3>
+                            <p style="color:var(--progress-bar); font-family:monospace;">1500ч+ / 14+</p>
+                            <p style="opacity:0.5; font-size:12px; margin-top:10px;">Умение строить клановые хаты, иметь 2-3 кастомки.</p>
+                        </div>
                     </a>
-                    <a href="https://forms.gle/RemZ3UWjSjzSLRqE6" target="_blank" class="recruit-card">
-                        <h3 class="glow-text" style="margin-bottom:10px;">Коллер</h3>
-                        <p style="color:var(--progress-bar); font-family:monospace;">4000ч+ / 18+</p>
-                        <p style="opacity:0.5; font-size:12px; margin-top:10px;">Опыт управления большой командой, умение быстро среагировать в трудной ситуации.</p>
+                    <a href="https://discord.gg/pgnE8JDNMN" target="_blank" class="recruit-card">
+                        <div class="recruit-card-inner">
+                            <h3 class="glow-text" style="margin-bottom:10px;">Коллер</h3>
+                            <p style="color:var(--progress-bar); font-family:monospace;">4000ч+ / 18+</p>
+                            <p style="opacity:0.5; font-size:12px; margin-top:10px;">Опыт управления большой командой, умение быстро среагировать в трудной ситуации.</p>
+                        </div>
                     </a>
-                    <a href="https://forms.gle/RemZ3UWjSjzSLRqE6" target="_blank" class="recruit-card">
-                        <h3 class="glow-text" style="margin-bottom:10px;">Участник</h3>
-                        <p style="color:var(--progress-bar); font-family:monospace;">2000ч+ / 16+</p>
-                        <p style="opacity:0.5; font-size:12px; margin-top:10px;">Уменее играть со всеми видами оружия, понимать что нужно клану, быть дисциплинированным и слушаться коллера. </p>
+                    <a href="https://discord.gg/pgnE8JDNMN" target="_blank" class="recruit-card">
+                        <div class="recruit-card-inner">
+                            <h3 class="glow-text" style="margin-bottom:10px;">Участник</h3>
+                            <p style="color:var(--progress-bar); font-family:monospace;">2000ч+ / 16+</p>
+                            <p style="opacity:0.5; font-size:12px; margin-top:10px;">Уменее играть со всеми видами оружия, понимать что нужно клану, быть дисциплинированным и слушаться коллера. </p>
+                        </div>
                     </a>
                 </div>
             </div>
@@ -312,6 +334,23 @@
                 <div style="display:flex; gap:15px; flex-wrap: wrap;">
                     <a href="https://discord.gg/mbBKwg2b2T" target="_blank" class="btn btn-fill">DISCORD SERVER</a>
                     <a href="https://discord.com/users/698062370228142191" target="_blank" class="btn btn-outline" style="margin:0;">ЛИЧНЫЕ СООБЩЕНИЯ</a>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <main class="ui-content" id="page-clans">
+        <section class="section">
+            <div class="hero-block visible">
+                <h1 class="hero-h1 glow-text">ДРУГИЕ<br>КЛАНЫ.</h1>
+                <p class="hero-p">Здесь представлены союзные объединения и партнеры нашего сообщества.</p>
+                <div class="recruit-grid">
+                    <div class="recruit-card">
+                        <div class="recruit-card-inner">
+                            <h3 class="glow-text" style="margin-bottom:10px;">МЕСТО СВОБОДНО</h3>
+                            <p style="opacity:0.5; font-size:12px;">Ваш клан может быть здесь. Свяжитесь с тех. поддержкой для сотрудничества.</p>
+                        </div>
+                    </div>
                 </div>
             </div>
         </section>
@@ -332,17 +371,13 @@ function playPopSound() {
     initAudio();
     const osc = audioCtx.createOscillator();
     const gain = audioCtx.createGain();
-    
     osc.type = 'sine';
     osc.frequency.setValueAtTime(150, audioCtx.currentTime);
     osc.frequency.exponentialRampToValueAtTime(40, audioCtx.currentTime + 0.1);
-    
     gain.gain.setValueAtTime(0.2, audioCtx.currentTime);
     gain.gain.linearRampToValueAtTime(0, audioCtx.currentTime + 0.1);
-    
     osc.connect(gain);
     gain.connect(audioCtx.destination);
-    
     osc.start();
     osc.stop(audioCtx.currentTime + 0.1);
 }
@@ -354,8 +389,49 @@ const progressBar = document.getElementById("progress-bar");
 let mouse = { x: -2000, y: -2000 };
 let objects = [];
 let particles = [];
-let themes = ["dark", "green", "red", "pink", "mono"];
+let themes = ["dark", "green", "red", "yellow", "pink", "mono"];
 let themeIndex = 0;
+
+function navigateTo(page) {
+    const defaultPage = document.getElementById('page-default');
+    const clansPage = document.getElementById('page-clans');
+    const dots = document.getElementById('sidebar-dots');
+    
+    document.querySelectorAll('.nav-link').forEach(l => l.classList.remove('active'));
+    
+    if(page === 'clans') {
+        defaultPage.style.opacity = '0';
+        dots.style.opacity = '0';
+        setTimeout(() => {
+            defaultPage.classList.remove('view-active');
+            dots.style.display = 'none';
+            clansPage.classList.add('view-active');
+            setTimeout(() => { clansPage.style.opacity = '1'; }, 50);
+        }, 600);
+        
+        document.getElementById('link-clans').classList.add('active');
+        if (window.location.protocol !== 'file:') {
+            window.history.pushState({}, '', '/killofsight/default/clans');
+        }
+        window.scrollTo({top: 0, behavior: 'smooth'});
+    } else {
+        clansPage.style.opacity = '0';
+        setTimeout(() => {
+            clansPage.classList.remove('view-active');
+            dots.style.display = 'flex';
+            defaultPage.classList.add('view-active');
+            setTimeout(() => { 
+                defaultPage.style.opacity = '1'; 
+                dots.style.opacity = '1';
+            }, 50);
+        }, 600);
+
+        document.getElementById('link-default').classList.add('active');
+        if (window.location.protocol !== 'file:') {
+            window.history.pushState({}, '', '/killofsight/default');
+        }
+    }
+}
 
 class RadParticle {
     constructor(x, y, color) {
@@ -424,7 +500,8 @@ class RadIcon {
 }
 
 function initAll() { 
-    initSystem(); 
+    initSystem();
+    document.getElementById('link-default').classList.add('active');
 }
 
 function initSystem() {
@@ -434,13 +511,11 @@ function initSystem() {
     window.addEventListener("mousedown", (e) => {
         initAudio();
         const triColor = getComputedStyle(document.documentElement).getPropertyValue("--tri-rgb").trim();
-        
         for(let i = objects.length - 1; i >= 0; i--) {
             const o = objects[i];
             const dx = e.clientX - o.x;
             const dy = e.clientY - o.y;
             const dist = Math.sqrt(dx*dx + dy*dy);
-            
             if(dist < o.size + 15) {
                 playPopSound();
                 for(let k=0; k<15; k++) particles.push(new RadParticle(o.x, o.y, triColor));
@@ -450,7 +525,6 @@ function initSystem() {
             }
         }
     });
-
     setupCanvas();
     render();
     setupIntersectionObservers();
