@@ -275,16 +275,15 @@
 
         <section id="info" class="section">
             <div class="hero-block">
-                <h1 class="hero-h1 glow-text">КТО МЫ ТАКИЕ.</h1>
-                <p class="hero-p"> СНГ клан который стремится к небесам, дабы получить власть которая и не снилась твоему отцу!.</p>
-                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 40px; margin-top: 40px;">
-                    <div>
-                        <h3 class="glow-text">01. ДИСЦИПЛИНА</h3>
-                        <p style="opacity:0.4; font-size:13px; margin-top:10px;">Во время рейдов - только важная информация. Флуд запрещен.</p>
-                    </div>
-                    <div>
-                        <h3 class="glow-text">02. РЕСУРСЫ</h3>
-                        <p style="opacity:0.4; font-size:13px; margin-top:10px;">Что либо крафтить, строить, тратить только при согласии лидера</p>
+                <h1 class="hero-h1 glow-text">ЕДИНСТВО</h1>
+                <p class="hero-p" style="font-style: italic; border-left: 2px solid var(--progress-bar); padding-left: 20px;">«Мы не просто группа игроков, а единый механизм. В нашем клане каждый знает свой тайминг и позицию.»</p>
+                
+                <div class="recruit-card" style="margin-top: 40px; max-width: 800px;">
+                    <div class="recruit-card-inner">
+                        <h3 class="glow-text" style="margin-bottom:15px; letter-spacing: 2px;">БОЕВОЙ ОПЫТ</h3>
+                        <p style="opacity:0.7; font-size:14px; line-height: 1.8; letter-spacing: 0.5px;">
+                            «За нашими плечами сотни успешных рейдов и тысячи часов в агрессивной среде. Мы хладнокровны в защите и беспощадны в нападении. Наш опыт позволяет нам выходить победителями из ситуаций, где другие сдаются. Мы не боимся поражений, потому что каждое из них делает нашу тактику совершеннее».
+                        </p>
                     </div>
                 </div>
             </div>
@@ -552,6 +551,17 @@ function handleScroll() {
     const height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
     if(progressBar) progressBar.style.width = (winScroll / height) * 100 + "%";
     document.getElementById("toTop").classList.toggle("show", winScroll > 600);
+    const sections = ['home', 'info', 'extra', 'contact'];
+    sections.forEach(s => {
+        const el = document.getElementById(s);
+        if(el) {
+            const rect = el.getBoundingClientRect();
+            if(rect.top >= -200 && rect.top <= 400) {
+                document.querySelectorAll('.dot').forEach(d => d.classList.remove('active'));
+                document.querySelector(`.dot[data-ref="${s}"]`)?.classList.add('active');
+            }
+        }
+    });
 }
 
 function jumpTo(id) {
@@ -561,44 +571,35 @@ function jumpTo(id) {
 
 function rotateTheme() {
     themeIndex = (themeIndex + 1) % themes.length;
-    document.documentElement.setAttribute("data-theme", themes[themeIndex]);
-}
-
-function toggleWinter() {
-    const isWinter = document.documentElement.getAttribute("data-theme") === "winter";
-    if (isWinter) {
-        document.documentElement.setAttribute("data-theme", themes[themeIndex]);
-    } else {
-        document.documentElement.setAttribute("data-theme", "winter");
-    }
-}
-
-function handleLogoClick() {
-    const menu = document.getElementById('themeMenu');
-    menu.classList.toggle('show');
+    setTheme(themes[themeIndex]);
 }
 
 function setTheme(t) {
     document.documentElement.setAttribute("data-theme", t);
     themeIndex = themes.indexOf(t);
+}
+
+function handleLogoClick() {
+    document.getElementById('themeMenu').classList.toggle('show');
+}
+
+function closeThemeMenu() {
     document.getElementById('themeMenu').classList.remove('show');
 }
 
-function closeThemeMenu() { document.getElementById('themeMenu').classList.remove('show'); }
+function toggleWinter() {
+    const current = document.documentElement.getAttribute("data-theme");
+    if(current === "winter") setTheme("dark");
+    else setTheme("winter");
+}
 
 function setupIntersectionObservers() {
-    const observer = new IntersectionObserver((entries) => {
-        entries.forEach((entry) => {
-            if (entry.isIntersecting) {
-                entry.target.classList.add("visible");
-                const id = entry.target.parentElement.id;
-                document.querySelectorAll(".dot").forEach(dot => {
-                    dot.classList.toggle("active", dot.getAttribute("data-ref") === id);
-                });
-            }
+    const obs = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if(entry.isIntersecting) entry.target.classList.add('visible');
         });
-    }, { threshold: 0.3 });
-    document.querySelectorAll(".hero-block").forEach(block => observer.observe(block));
+    }, { threshold: 0.15 });
+    document.querySelectorAll('.hero-block').forEach(el => obs.observe(el));
 }
 </script>
 </body>
