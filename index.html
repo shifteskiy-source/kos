@@ -1,11 +1,10 @@
-﻿<!DOCTYPE html><!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="ru" data-theme="dark">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>KOS | Kill On Sight</title>
     
-    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&display=swap" rel="stylesheet">
@@ -13,12 +12,8 @@
     <style>
         :root {
             --transition-main: 0.8s cubic-bezier(0.2, 1, 0.3, 1);
-            --transition-fast: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-            --transition-smooth: 0.5s ease-in-out;
             --sidebar-width: 90px;
-            --topbar-height: 100px;
-            --glow-intensity: 0 0 30px;
-            --blur-strength: 20px;
+            --topbar-height: 140px; /* Увеличено для плавного градиента маски */
         }
 
         [data-theme="dark"] {
@@ -32,534 +27,191 @@
             --vignette: radial-gradient(circle, transparent 5%, rgba(0,0,0,1) 100%);
             --glow-color: rgba(110, 80, 255, 0.9);
             --progress-bar: #7c4dff;
-            --auth-btn-bg: linear-gradient(135deg, #6e50ff 0%, #a350ff 100%);
-            --input-bg: rgba(255, 255, 255, 0.05);
-            --triangle-fill: rgba(110, 80, 255, 0.05);
-            --line-color: rgba(110, 80, 255, 0.3);
-            --tri-rgb: 110, 80, 255;
+            --tri-rgb: 110, 80, 255; 
         }
 
-        [data-theme="light"] {
-            --background-color: #f5f5f7;
-            --text-color: #0a0a0a;
-            --accent-color: rgba(0, 0, 0, 0.08);
-            --dot-idle: rgba(0, 0, 0, 0.3);
-            --sidebar-bg: rgba(255, 255, 255, 0.85);
-            --button-primary-bg: #0a0a0a;
+        [data-theme="green"] {
+            --background-color: #020a02;
+            --text-color: #e0ffe0;
+            --accent-color: rgba(0, 255, 100, 0.15);
+            --dot-idle: rgba(0, 255, 100, 0.3);
+            --sidebar-bg: rgba(2, 12, 2, 0.92);
+            --button-primary-bg: #00ff64;
+            --button-primary-text: #000000;
+            --vignette: radial-gradient(circle, transparent 5%, rgba(0,5,0,1) 100%);
+            --glow-color: rgba(0, 255, 100, 0.5);
+            --progress-bar: #00ff64;
+            --tri-rgb: 0, 255, 100;
+        }
+
+        [data-theme="red"] {
+            --background-color: #0a0202;
+            --text-color: #ffe0e0;
+            --accent-color: rgba(255, 50, 50, 0.15);
+            --dot-idle: rgba(255, 50, 50, 0.3);
+            --sidebar-bg: rgba(15, 2, 2, 0.92);
+            --button-primary-bg: #ff3232;
             --button-primary-text: #ffffff;
-            --vignette: radial-gradient(circle, transparent 40%, rgba(200,200,220,0.4) 100%);
-            --glow-color: rgba(0, 0, 0, 0.15);
-            --progress-bar: #000000;
-            --auth-btn-bg: #1a1a1a;
-            --input-bg: rgba(0, 0, 0, 0.04);
-            --triangle-fill: rgba(0, 0, 0, 0.02);
-            --line-color: rgba(0, 0, 0, 0.1);
-            --tri-rgb: 0, 0, 0;
+            --vignette: radial-gradient(circle, transparent 5%, rgba(10,0,0,1) 100%);
+            --glow-color: rgba(255, 50, 50, 0.5);
+            --progress-bar: #ff3232;
+            --tri-rgb: 255, 50, 50;
         }
 
-        * { 
-            margin: 0; 
-            padding: 0; 
-            box-sizing: border-box; 
-            -webkit-user-select: none; 
-            user-select: none; 
-            cursor: default; 
-            outline: none;
-        }
-
+        * { margin: 0; padding: 0; box-sizing: border-box; -webkit-user-select: none; user-select: none; cursor: crosshair; outline: none;}
+        
         html { 
             scroll-snap-type: y mandatory; 
             scroll-behavior: smooth; 
             overflow-x: hidden;
         }
 
-        body {
+        body { 
             background-color: var(--background-color); 
-            color: var(--text-color);
+            color: var(--text-color); 
             font-family: 'Inter', sans-serif; 
             min-height: 100vh;
-            line-height: 1.5;
         }
 
-        #canvas { 
-            position: fixed; 
-            top: 0; left: 0; 
-            width: 100%; height: 100%; 
-            z-index: 1; 
-            pointer-events: none; 
-        }
-
-        .vignette { 
-            position: fixed; 
-            top: 0; left: 0; 
-            width: 100%; height: 100%; 
-            background: var(--vignette); 
-            pointer-events: none; 
-            z-index: 5; 
-            transition: opacity 1s ease;
-        }
-
-        .glow-text {
-            text-shadow: var(--glow-intensity) var(--glow-color);
-        }
-
-        .scroll-progress {
-            position: fixed; 
-            top: 0; left: 0; 
-            height: 5px;
-            background: var(--progress-bar); 
-            z-index: 9999;
-            width: 0%; 
-            transition: width 0.1s linear;
-            box-shadow: 0 0 20px var(--glow-color);
-        }
-
-        .side-bar { 
-            position: fixed; 
-            left: 0; top: 0; 
-            width: var(--sidebar-width); 
-            height: 100vh; 
-            border-right: 1px solid var(--accent-color); 
-            display: flex; 
-            flex-direction: column; 
-            justify-content: space-between; 
-            align-items: center; 
-            padding: 50px 0; 
-            z-index: 8000; 
-            background: var(--sidebar-bg); 
-            backdrop-filter: blur(var(--blur-strength)); 
-            animation: sidebarEntrance 1.5s var(--transition-main) forwards;
-        }
-
-        @keyframes sidebarEntrance {
-            from { transform: translateX(-100%); opacity: 0; }
-            to { transform: translateX(0); opacity: 1; }
-        }
-
-        .side-logo { 
-            width: 50px; 
-            height: 50px; 
-            cursor: pointer;
-            transition: all 0.6s var(--transition-main);
-            display: flex; 
-            align-items: center; 
-            justify-content: center;
-            border-radius: 12px;
-            overflow: hidden;
-            background: rgba(255,255,255,0.03);
-            border: 1px solid transparent;
-        }
-
-        .side-logo:hover { 
-            transform: scale(1.15) rotate(5deg); 
-            border-color: var(--glow-color);
-            box-shadow: 0 0 20px var(--glow-color);
-        }
-
-        .side-logo img { 
-            width: 100%; 
-            height: 100%; 
-            object-fit: cover; 
+        /* --- VHS EFFECT --- */
+        body::after {
+            content: "";
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.08) 50%), 
+                        linear-gradient(90deg, rgba(255, 0, 0, 0.02), rgba(0, 255, 0, 0.01), rgba(0, 0, 255, 0.02));
+            background-size: 100% 4px, 4px 100%;
             pointer-events: none;
+            z-index: 10000;
         }
 
-        .side-dots { 
-            display: flex; 
-            flex-direction: column; 
-            gap: 35px; 
+        @keyframes vhs-jitter {
+            0% { transform: translate(0,0); }
+            5% { transform: translate(-0.5px, 0.5px); }
+            10% { transform: translate(0.5px, -0.5px); }
+            100% { transform: translate(0,0); }
+        }
+        .vhs-overlay {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            pointer-events: none; z-index: 9998;
+            background: url('https://grainy-gradients.vercel.app/noise.svg');
+            opacity: 0.04;
+            animation: vhs-jitter 0.15s infinite;
         }
 
-        .dot { 
-            width: 10px; 
-            height: 10px; 
-            background: var(--dot-idle); 
-            border-radius: 50%; 
-            transition: all 0.6s cubic-bezier(0.34, 1.56, 0.64, 1); 
-            cursor: pointer; 
-            position: relative;
+        .screen-vignette {
+            position: fixed; top: 0; left: var(--sidebar-width); width: calc(100% - var(--sidebar-width)); height: 100%;
+            background: radial-gradient(circle, transparent 40%, rgba(0,0,0,0.7) 100%);
+            pointer-events: none; z-index: 9997;
         }
 
-        .dot.active { 
-            background: var(--text-color); 
-            transform: scale(2.5);
-            box-shadow: 0 0 25px var(--glow-color);
-        }
+        #canvas { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: 1; pointer-events: all; }
+        .vignette { position: fixed; top: 0; left: var(--sidebar-width); width: calc(100% - var(--sidebar-width)); height: 100%; background: var(--vignette); pointer-events: none; z-index: 5; }
+        .glow-text { text-shadow: 0 0 20px var(--glow-color); }
+        
+        .scroll-progress { position: fixed; top: 0; left: 0; height: 5px; background: var(--progress-bar); z-index: 9999; width: 0%; transition: width 0.1s linear; box-shadow: 0 0 20px var(--glow-color); }
 
-        .side-label {
-            writing-mode: vertical-rl; 
-            transform: rotate(180deg);
-            text-transform: uppercase; 
-            letter-spacing: 10px;
-            font-size: 11px; 
-            font-weight: 900; 
-            opacity: 0.2;
-            transition: opacity 0.3s;
-        }
+        .side-bar { position: fixed; left: 0; top: 0; width: var(--sidebar-width); height: 100vh; border-right: 1px solid var(--accent-color); display: flex; flex-direction: column; justify-content: space-between; align-items: center; padding: 50px 0; z-index: 8000; background: var(--sidebar-bg); backdrop-filter: blur(20px); }
+        
+        .side-logo { width: 50px; height: 50px; display: flex; align-items: center; justify-content: center; border-radius: 12px; background: rgba(255,255,255,0.03); border: 1px solid var(--accent-color); font-weight: 900; }
+        .side-dots { display: flex; flex-direction: column; gap: 35px; }
+        .dot { width: 10px; height: 10px; background: var(--dot-idle); border-radius: 50%; transition: 0.6s; cursor: pointer; }
+        .dot.active { background: var(--text-color); transform: scale(2.5); box-shadow: 0 0 25px var(--glow-color); }
+        .side-label { writing-mode: vertical-rl; transform: rotate(180deg); text-transform: uppercase; letter-spacing: 10px; font-size: 11px; font-weight: 900; opacity: 0.2; }
 
-        .top-bar {
-            position: fixed; 
-            top: 0; left: 0; 
-            width: 100%;
-            height: var(--topbar-height); 
-            z-index: 7000;
-            display: flex; 
-            align-items: center;
-            padding: 0 60px 0 calc(var(--sidebar-width) + 60px);
-            justify-content: space-between;
-            background: linear-gradient(to bottom, var(--sidebar-bg) 0%, transparent 100%);
-            backdrop-filter: blur(8px);
-            border-bottom: 1px solid transparent;
-            transition: border-bottom 0.4s;
-        }
-
-        .top-title {
-            font-size: 24px; 
-            font-weight: 900; 
-            letter-spacing: 15px;
-            text-transform: uppercase; 
-            color: var(--text-color);
-            margin-right: auto;
-        }
-
-        .nav-links { 
-            display: flex; 
-            align-items: center; 
-            gap: 30px; 
-        }
-
-        .nav-item {
-            text-decoration: none; 
-            color: var(--text-color);
-            font-size: 11px; 
-            font-weight: 700; 
-            text-transform: uppercase;
-            letter-spacing: 3px; 
-            opacity: 0.5; 
-            transition: 0.4s;
-            cursor: pointer;
-            position: relative;
-        }
-
-        .auth-btn {
-            padding: 14px 32px; 
-            border-radius: 50px;
-            background: var(--auth-btn-bg); 
-            color: white;
-            font-size: 11px; 
-            font-weight: 900; 
-            text-transform: uppercase;
-            letter-spacing: 3px; 
-            border: none; 
-            cursor: pointer;
-            box-shadow: 0 10px 25px rgba(110, 80, 255, 0.4);
-            transition: all 0.5s var(--transition-main);
-        }
-
-        .ui-content { 
-            position: relative; 
-            z-index: 10; 
-            padding-left: var(--sidebar-width);
-            transition: filter 0.8s var(--transition-main);
-        }
-
-        .section {
-            min-height: 100vh; 
-            display: flex; 
-            align-items: center;
-            padding: 120px 10%; 
-            scroll-snap-align: start;
-            position: relative; 
-            overflow: hidden;
-        }
-
-        .hero-block { 
-            max-width: 1000px; 
-            z-index: 20; 
-            opacity: 0;
-            transform: translateY(40px);
-            transition: all 1.2s var(--transition-main);
-        }
-
-        .hero-block.visible {
-            opacity: 1;
-            transform: translateY(0);
-        }
-
-        .hero-h1 {
-            font-size: clamp(50px, 10vw, 110px); 
-            font-weight: 900;
-            line-height: 1.1; 
-            text-transform: uppercase;
-            margin-bottom: 45px;
-            letter-spacing: -2px;
-        }
-
-        .hero-p {
-            font-size: 18px; 
-            line-height: 1.6; 
-            opacity: 0.6;
-            max-width: 700px; 
-            margin-bottom: 60px;
-        }
-
-        .btn {
-            padding: 24px 50px; 
-            border-radius: 100px;
-            font-size: 12px; 
-            font-weight: 900; 
-            text-transform: uppercase;
-            letter-spacing: 4px; 
-            cursor: pointer; 
-            transition: 0.6s var(--transition-main);
-            display: inline-block;
-            text-decoration: none;
-        }
-
-        .btn-fill { 
-            background: var(--button-primary-bg); 
-            color: var(--button-primary-text); 
-            border: none; 
-        }
-
-        .btn-outline { 
-            background: transparent; 
-            border: 2px solid var(--text-color); 
-            color: var(--text-color); 
-        }
-
-        .overlay {
-            position: fixed; 
-            top: 0; left: 0; 
-            width: 100%; height: 100%;
-            background: rgba(0,0,0,0.9); 
-            z-index: 9500;
-            display: flex; 
-            align-items: center; 
-            justify-content: center;
-            opacity: 0; 
-            visibility: hidden; 
-            transition: all 0.6s var(--transition-fast);
-        }
-
-        .overlay.active { 
-            opacity: 1; 
-            visibility: visible; 
-        }
-
-        .modal-card {
-            width: 100%; 
-            max-width: 500px; 
-            background: var(--sidebar-bg);
-            border: 1px solid var(--accent-color); 
-            border-radius: 45px;
-            padding: 60px; 
-            transform: scale(0.8) translateY(60px); 
-            transition: all 0.8s var(--transition-main);
-            backdrop-filter: blur(50px); 
-            text-align: center;
-        }
-
-        .overlay.active .modal-card { 
-            transform: scale(1) translateY(0); 
-        }
-
-        .input-field {
-            width: 100%; 
-            padding: 20px 30px; 
-            border-radius: 20px;
-            background: var(--input-bg); 
-            border: 1px solid var(--accent-color);
-            color: var(--text-color); 
-            margin-bottom: 20px; 
-            outline: none;
-            transition: 0.4s; 
-            font-size: 14px;
-        }
-
-        .toast-msg {
-            position: fixed; 
-            bottom: 50px; 
-            left: 50%; 
-            transform: translateX(-50%) translateY(120px);
-            background: var(--sidebar-bg); 
-            border: 1px solid var(--accent-color);
-            padding: 18px 45px; 
-            border-radius: 60px; 
-            font-weight: 900; 
-            font-size: 13px;
-            z-index: 10000; 
-            transition: all 0.7s var(--transition-main); 
-            opacity: 0;
-            backdrop-filter: blur(25px);
-            text-transform: uppercase;
-        }
-
-        .toast-msg.active { 
-            transform: translateX(-50%) translateY(0); 
-            opacity: 1; 
-        }
-
-        #user-panel {
-            position: fixed; 
-            top: 0; left: 0; 
-            width: 100%; height: 100%;
-            background: var(--background-color); 
-            z-index: 9999; 
-            display: none;
-            padding: 120px; 
-            animation: panelFade 0.8s ease;
-        }
-
-        .floating-btn {
-            position: fixed; 
-            right: 50px; 
-            bottom: 50px; 
-            width: 70px; 
-            height: 70px;
-            border: 1px solid var(--accent-color); 
-            border-radius: 50%;
-            display: flex; 
-            align-items: center; 
-            justify-content: center;
-            background: var(--sidebar-bg); 
-            backdrop-filter: blur(15px);
-            cursor: pointer; 
-            z-index: 6000; 
-            transition: all 0.5s; 
-            opacity: 0;
-            visibility: hidden;
-            color: var(--text-color);
-        }
-
-        .floating-btn.visible { 
-            opacity: 1; 
-            visibility: visible; 
-        }
-
-        .recruit-grid { 
-            display: grid; 
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); 
-            gap: 20px; 
-            width: 100%; 
-            margin-top: 40px; 
+        /* ПЛАВНЫЙ БЛЮР ПАНЕЛИ */
+        .top-bar { 
+            position: fixed; top: 0; left: 0; width: 100%; height: var(--topbar-height); z-index: 7000; 
+            display: flex; align-items: flex-start; padding: 40px 60px 0 calc(var(--sidebar-width) + 60px); 
+            justify-content: space-between; background: var(--sidebar-bg); 
+            backdrop-filter: blur(20px); 
+            -webkit-mask-image: linear-gradient(to bottom, black 40%, transparent 100%);
+            mask-image: linear-gradient(to bottom, black 40%, transparent 100%);
         }
         
-        .recruit-card { 
-            background: rgba(255,255,255,0.02); 
-            border: 1px solid var(--accent-color); 
-            padding: 30px; 
-            position: relative; 
-            border-radius: 2px; 
+        /* КНОПКА ВВЕРХ */
+        .back-to-top {
+            position: fixed; bottom: 30px; right: 30px; width: 50px; height: 50px;
+            background: rgba(255,255,255,0.05); border: 1px solid var(--accent-color);
+            color: var(--text-color); border-radius: 50%; display: flex; align-items: center;
+            justify-content: center; cursor: pointer; z-index: 9999; transition: 0.3s;
+            opacity: 0; visibility: hidden;
         }
+        .back-to-top.show { opacity: 1; visibility: visible; }
+        .back-to-top:hover { background: var(--text-color); color: #000; }
+
+        .ui-content { position: relative; z-index: 10; padding-left: var(--sidebar-width); }
+        .section { min-height: 100vh; display: flex; align-items: center; padding: 120px 10%; scroll-snap-align: start; position: relative; }
+
+        .hero-block { max-width: 1000px; z-index: 20; opacity: 0; transform: translateY(40px); transition: all 1.2s var(--transition-main); }
+        .hero-block.visible { opacity: 1; transform: translateY(0); }
         
-        .recruit-card::before { 
-            content: ""; 
-            position: absolute; 
-            top: 0; left: 0; 
-            width: 4px; height: 100%; 
-            background: var(--glow-color); 
-        }
+        .hero-h1 { font-size: clamp(50px, 10vw, 110px); font-weight: 900; line-height: 1.2; text-transform: uppercase; margin-bottom: 30px; letter-spacing: -2px; }
+        .hero-p { font-size: 18px; line-height: 1.6; opacity: 0.6; max-width: 700px; margin-bottom: 50px; }
+        
+        .btn { display: inline-block; text-decoration: none; padding: 22px 45px; font-size: 11px; font-weight: 900; text-transform: uppercase; letter-spacing: 3px; cursor: pointer; transition: 0.3s; border: 1px solid transparent; text-align: center; }
+        .btn-fill { background: var(--button-primary-bg); color: var(--button-primary-text); }
+        .btn-fill:hover { transform: translateY(-3px); box-shadow: 0 15px 40px var(--glow-color); }
+        .btn-outline { background: transparent; border: 1px solid var(--text-color); color: var(--text-color); margin-left: 15px; }
+        .btn-outline:hover { background: var(--text-color); color: #000; }
 
-        .separator {
-            height: 1px;
-            width: 100%;
-            background: linear-gradient(90deg, transparent, var(--accent-color), transparent);
-            margin: 40px 0;
-        }
-
-        @media (max-width: 1000px) {
-            .side-bar { display: none; }
-            .ui-content { padding-left: 0; }
-            .top-bar { padding: 0 30px; }
-            .hero-h1 { font-size: 50px; }
-            .hero-block { text-align: center; }
-        }
+        .recruit-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px; width: 100%; margin-top: 40px; }
+        .recruit-card { background: rgba(255,255,255,0.02); border: 1px solid var(--accent-color); padding: 30px; position: relative; border-radius: 2px; }
+        .recruit-card::before { content: ""; position: absolute; top: 0; left: 0; width: 4px; height: 100%; background: var(--glow-color); }
+        
+        @media (max-width: 1000px) { .side-bar { display: none; } .ui-content { padding-left: 0; } .hero-h1 { font-size: 50px; } }
     </style>
 </head>
-<body onload="initSystem()">
+<body onload="initAll()">
 
+    <div class="vhs-overlay"></div>
+    <div class="screen-vignette"></div>
     <canvas id="canvas"></canvas>
     <div class="vignette"></div>
     <div class="scroll-progress" id="progress-bar"></div>
-    <div id="toast" class="toast-msg">Initialization Complete</div>
+
+    <div class="back-to-top" id="toTop" onclick="window.scrollTo(0,0)">▲</div>
 
     <aside class="side-bar">
-        <div class="side-logo" onclick="jumpTo('home')">
-            <div style="font-weight: 900; font-size: 18px;">KOS</div>
-        </div>
-        
+        <div class="side-logo" onclick="jumpTo('home')">KOS</div>
         <div class="side-dots">
             <div class="dot active" data-ref="home" onclick="jumpTo('home')"></div>
             <div class="dot" data-ref="info" onclick="jumpTo('info')"></div>
             <div class="dot" data-ref="extra" onclick="jumpTo('extra')"></div>
             <div class="dot" data-ref="contact" onclick="jumpTo('contact')"></div>
         </div>
-        
         <div class="side-label">KILL ON SIGHT 2026</div>
     </aside>
 
     <header class="top-bar" id="header">
-        <div class="top-title glow-text">KOS</div>
-        <nav class="nav-links">
-            <a class="nav-item" onclick="jumpTo('info')">ИНФОРМАЦИЯ</a>
-            <a class="nav-item" onclick="jumpTo('extra')">НАБОР</a>
-            <div id="auth-slot">
-                <button class="auth-btn" onclick="modalCtrl(true)">Secure Login</button>
-            </div>
-            <button onclick="toggleTheme()" style="background:none; border:1px solid var(--accent-color); color:var(--text-color); width:40px; height:40px; border-radius:50%; cursor:pointer;">◐</button>
-        </nav>
+        <div class="top-title">KOS</div>
+        <button onclick="rotateTheme()" style="background:none; border:1px solid var(--accent-color); color:var(--text-color); width:40px; height:40px; border-radius:50%; cursor:pointer; pointer-events: auto;">◈</button>
     </header>
 
-    <div class="overlay" id="modal-overlay">
-        <div class="modal-card">
-            <h2 class="modal-title glow-text">Access Protocol</h2>
-            <p style="font-size: 12px; opacity: 0.4; margin-bottom: 40px;">AUTHORIZE YOUR NEURAL CONNECTION</p>
-            
-            <form id="login-form" onsubmit="processLogin(event)">
-                <input type="email" id="user-mail" class="input-field" placeholder="Identification (Email)" required>
-                <input type="password" id="user-pass" class="input-field" placeholder="Encrypted Key" required>
-                <button type="submit" class="auth-btn" style="width: 100%; margin-top: 10px; padding: 22px;">Execute Link</button>
-            </form>
-            
-            <p onclick="modalCtrl(false)" style="margin-top: 30px; font-size: 11px; cursor: pointer; opacity: 0.3; letter-spacing: 2px;">ABORT CONNECTION</p>
-        </div>
-    </div>
-
-    <div id="user-panel">
-        <div style="max-width: 1200px; margin: 0 auto; text-align: center;">
-            <h1 class="glow-text" style="font-size: clamp(40px, 8vw, 100px); margin-bottom: 30px;">DASHBOARD.V3</h1>
-            <div class="separator"></div>
-            <p style="opacity: 0.5; font-size: 18px; margin-bottom: 60px;">Welcome back to the secure environment. All systems are operational.</p>
-            <button class="btn btn-outline" onclick="terminateSession()">Terminate Session</button>
-        </div>
-    </div>
-
     <main class="ui-content" id="main-view">
-        
         <section id="home" class="section">
             <div class="hero-block">
                 <h1 class="hero-h1 glow-text">KILL<br>ON SIGHT.</h1>
                 <p class="hero-p">Мы обычный стак в Расте. Просто заходим постреляться, порейдить и нормально провести время. Никакой лишней суеты, только игра.</p>
-                <div class="action-group" style="display:flex; gap:20px;">
-                    <button class="btn btn-fill" onclick="jumpTo('extra')">ХОЧУ В КЛАН</button>
-                    <button class="btn btn-outline" onclick="jumpTo('info')">ИНФОРМАЦИЯ</button>
+                <div class="action-group">
+                    <a href="javascript:void(0)" class="btn btn-fill" onclick="jumpTo('extra')">ХОЧУ В КЛАН</a>
+                    <a href="javascript:void(0)" class="btn btn-outline" onclick="jumpTo('info')">ИНФОРМАЦИЯ</a>
                 </div>
             </div>
         </section>
 
         <section id="info" class="section">
             <div class="hero-block">
-                <h1 class="hero-h1 glow-text">КТО МЫ<br>ТАКИЕ.</h1>
-                <p class="hero-p">СНГ клан, который стремится к небесам, дабы получить власть, которая и не снилась твоему отцу!</p>
-                <div class="separator"></div>
-                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 30px;">
-                    <div style="padding: 30px; background: var(--input-bg); border-radius: 25px; border: 1px solid var(--accent-color);">
-                        <h4 style="margin-bottom: 10px; letter-spacing: 2px;">01. ДИСЦИПЛИНА</h4>
-                        <p style="font-size: 12px; opacity: 0.5;">Во время рейдов - только важная информация. Флуд запрещен.</p>
+                <h1 class="hero-h1 glow-text">КТО МЫ ТАКИЕ.</h1>
+                <p class="hero-p"> СНГ клан который стремится к небесам, дабы получить власть которая и не снилась твоему отцу!.</p>
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 40px; margin-top: 40px;">
+                    <div>
+                        <h3 class="glow-text">01. ДИСЦИПЛИНА</h3>
+                        <p style="opacity:0.4; font-size:13px; margin-top:10px;">Во время рейдов - только важная информация. Флуд запрещен.</p>
                     </div>
-                    <div style="padding: 30px; background: var(--input-bg); border-radius: 25px; border: 1px solid var(--accent-color);">
-                        <h4 style="margin-bottom: 10px; letter-spacing: 2px;">02. РЕСУРСЫ</h4>
-                        <p style="font-size: 12px; opacity: 0.5;">Что либо крафтить, строить, тратить только при согласии лидера.</p>
+                    <div>
+                        <h3 class="glow-text">02. РЕСУРСЫ</h3>
+                        <p style="opacity:0.4; font-size:13px; margin-top:10px;">Что либо крафтить, строить, тратить только при согласии лидера</p>
                     </div>
                 </div>
             </div>
@@ -567,8 +219,8 @@
 
         <section id="extra" class="section">
             <div class="hero-block">
-                <h1 class="hero-h1 glow-text">НАБОР<br>В KOS.</h1>
-                <p class="hero-p">Требования для вступления в основной состав:</p>
+                <h1 class="hero-h1 glow-text">НАБОР В KOS.</h1>
+                <p class="hero-p">Требования для вступления:</p>
                 <div class="recruit-grid">
                     <div class="recruit-card">
                         <h3 style="margin-bottom:10px;">COMBAT</h3>
@@ -591,166 +243,185 @@
 
         <section id="contact" class="section">
             <div class="hero-block">
-                <h1 class="hero-h1 glow-text">DIRECT<br>LINK.</h1>
-                <p class="hero-p">Свяжись с нами через Discord или заходи на наш сервер.</p>
-                <div class="action-group" style="display:flex; gap:20px; flex-wrap:wrap;">
+                <h1 class="hero-h1 glow-text">КОНТАКТЫ.</h1>
+                <p class="hero-p">Свяжись с нами через Discord.</p>
+                <div style="display:flex; gap:15px; flex-wrap: wrap;">
                     <a href="https://discord.gg/mbBKwg2b2T" target="_blank" class="btn btn-fill">DISCORD SERVER</a>
-                    <a href="https://discord.com/users/698062370228142191" target="_blank" class="btn btn-outline">ЛИЧНЫЕ СООБЩЕНИЯ</a>
+                    <a href="https://discord.com/users/698062370228142191" target="_blank" class="btn btn-outline" style="margin:0;">ЛИЧНЫЕ СООБЩЕНИЯ</a>
                 </div>
             </div>
         </section>
-
     </main>
 
-    <div class="floating-btn" id="scroll-top-btn" onclick="jumpTo('home')">
-        <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
-            <path d="M18 15l-6-6-6 6"/>
-        </svg>
-    </div>
+<script>
+function initAll() { initSystem(); }
 
-    <script>
-        const canvas = document.getElementById('canvas');
-        const ctx = canvas.getContext('2d');
-        const mainView = document.getElementById('main-view');
-        const modalOverlay = document.getElementById('modal-overlay');
-        const progressBar = document.getElementById('progress-bar');
-        const header = document.getElementById('header');
-        
-        let particles = [];
-        let mouse = { x: null, y: null };
-        let currentTheme = 'dark';
+const canvas = document.getElementById("canvas");
+const ctx = canvas.getContext("2d");
+const progressBar = document.getElementById("progress-bar");
 
-        function initSystem() {
-            if ('scrollRestoration' in history) {
-                history.scrollRestoration = 'manual';
+let mouse = { x: -2000, y: -2000 };
+let objects = [];
+let particles = [];
+let matrixStreams = []; 
+let themes = ["dark", "green", "red"];
+let themeIndex = 0;
+
+class MatrixStream {
+    constructor(x) { this.reset(x); }
+    reset(x) {
+        this.x = x;
+        this.y = Math.random() * -100;
+        this.speed = 1 + Math.random() * 2;
+        this.chars = "01$#@&*☢︎".split("");
+        this.fontSize = 14;
+    }
+    update() {
+        this.y += this.speed;
+        if (this.y > 140) this.reset(this.x);
+    }
+    draw(triColor) {
+        if (this.y > 0 && this.y < 140) {
+            ctx.fillStyle = `rgba(${triColor}, 0.6)`;
+            ctx.font = `bold ${this.fontSize}px monospace`;
+            const char = this.chars[Math.floor(Math.random() * this.chars.length)];
+            ctx.fillText(char, this.x, this.y);
+        }
+    }
+}
+
+class RadParticle {
+    constructor(x, y, color) {
+        this.x = x; this.y = y;
+        this.vx = (Math.random() - 0.5) * 6;
+        this.vy = (Math.random() - 0.5) * 6;
+        this.alpha = 1;
+        this.color = color;
+    }
+    update() { this.x += this.vx; this.y += this.vy; this.alpha -= 0.025; }
+    draw() {
+        ctx.fillStyle = `rgba(${this.color}, ${this.alpha})`;
+        ctx.beginPath(); ctx.arc(this.x, this.y, 1.5, 0, Math.PI*2); ctx.fill();
+    }
+}
+
+class RadIcon {
+    constructor() { this.reset(); }
+    reset() {
+        this.x = Math.random() * canvas.width;
+        this.y = Math.random() * canvas.height;
+        this.size = 15 + Math.random() * 20;
+        this.vx = (Math.random() - 0.5) * 1.2;
+        this.vy = (Math.random() - 0.5) * 1.2;
+        this.rot = Math.random() * Math.PI * 2;
+        this.op = 0;
+    }
+    update() {
+        this.x += this.vx; this.y += this.vy;
+        this.rot += 0.01;
+        if(this.op < 1) this.op += 0.02;
+        if(this.x < 0 || this.x > canvas.width) this.vx *= -1;
+        if(this.y < 0 || this.y > canvas.height) this.vy *= -1;
+    }
+    draw(triColor) {
+        ctx.save();
+        ctx.translate(this.x, this.y);
+        ctx.rotate(this.rot);
+        ctx.globalAlpha = this.op * 0.4;
+        ctx.fillStyle = `rgb(${triColor})`;
+        ctx.beginPath();
+        ctx.arc(0, 0, this.size * 0.2, 0, Math.PI * 2);
+        ctx.fill();
+        for (let i = 0; i < 3; i++) {
+            ctx.beginPath();
+            ctx.moveTo(0, 0);
+            ctx.arc(0, 0, this.size, i * (Math.PI * 2 / 3), i * (Math.PI * 2 / 3) + Math.PI / 3);
+            ctx.lineTo(0, 0);
+            ctx.fill();
+        }
+        ctx.restore();
+        let d = Math.hypot(this.x - mouse.x, this.y - mouse.y);
+        if(d < 180) {
+            ctx.strokeStyle = `rgba(${triColor}, ${0.2 * (1 - d/180)})`;
+            ctx.beginPath(); ctx.moveTo(this.x, this.y); ctx.lineTo(mouse.x, mouse.y); ctx.stroke();
+        }
+    }
+}
+
+function initSystem() {
+    window.addEventListener("resize", setupCanvas);
+    window.addEventListener("scroll", handleScroll);
+    window.addEventListener("mousemove", e => { mouse.x = e.clientX; mouse.y = e.clientY; });
+    window.addEventListener("mousedown", e => {
+        const triColor = getComputedStyle(document.documentElement).getPropertyValue("--tri-rgb").trim();
+        objects.forEach(obj => {
+            if(Math.hypot(obj.x - e.clientX, obj.y - e.clientY) < obj.size * 1.5) {
+                for(let i=0; i<15; i++) particles.push(new RadParticle(obj.x, obj.y, triColor));
+                obj.reset();
             }
-            window.scrollTo(0, 0);
+        });
+    });
+    setupCanvas();
+    render();
+    setupIntersectionObservers();
+}
 
-            window.addEventListener('resize', setupCanvas);
-            window.addEventListener('mousemove', e => { mouse.x = e.clientX; mouse.y = e.clientY; });
-            window.addEventListener('scroll', handleScroll);
-            
-            setupCanvas();
-            renderEngine();
-            setupIntersectionObservers();
-            triggerToast("System Online");
-        }
+function setupCanvas() {
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+    objects = Array.from({length: 30}, () => new RadIcon());
+    matrixStreams = [];
+    const spacing = 25;
+    for(let i = 0; i < canvas.width / spacing; i++) {
+        matrixStreams.push(new MatrixStream(i * spacing));
+    }
+}
 
-        function setupCanvas() {
-            canvas.width = window.innerWidth;
-            canvas.height = window.innerHeight;
-            const density = window.innerWidth < 1000 ? 40 : 85;
-            particles = [];
-            for (let i = 0; i < density; i++) {
-                particles.push(new Particle());
-            }
-        }
+function render() {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    const triColor = getComputedStyle(document.documentElement).getPropertyValue("--tri-rgb").trim();
+    
+    matrixStreams.forEach(stream => { stream.update(); stream.draw(triColor); });
+    objects.forEach(obj => { obj.update(); obj.draw(triColor); });
+    
+    for(let i=particles.length-1; i>=0; i--) {
+        particles[i].update(); particles[i].draw();
+        if(particles[i].alpha <= 0) particles.splice(i, 1);
+    }
+    requestAnimationFrame(render);
+}
 
-        class Particle {
-            constructor() {
-                this.x = Math.random() * canvas.width;
-                this.y = Math.random() * canvas.height;
-                this.vx = (Math.random() - 0.5) * 0.7;
-                this.vy = (Math.random() - 0.5) * 0.7;
-                this.size = Math.random() * 2 + 1;
-            }
-            update() {
-                this.x += this.vx;
-                this.y += this.vy;
-                if (this.x < 0 || this.x > canvas.width) this.vx *= -1;
-                if (this.y < 0 || this.y > canvas.height) this.vy *= -1;
-            }
-            draw() {
-                ctx.fillStyle = getComputedStyle(document.documentElement).getPropertyValue('--dot-idle');
-                ctx.beginPath();
-                ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
-                ctx.fill();
-            }
-        }
+function handleScroll() {
+    const winScroll = document.documentElement.scrollTop;
+    const height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+    if(progressBar) progressBar.style.width = (winScroll / height) * 100 + "%";
+    document.getElementById("toTop").classList.toggle("show", winScroll > 600);
+}
 
-        function renderEngine() {
-            ctx.clearRect(0, 0, canvas.width, canvas.height);
-            const triRGB = getComputedStyle(document.documentElement).getPropertyValue('--tri-rgb').trim();
+function jumpTo(id) {
+    const el = document.getElementById(id);
+    if(el) el.scrollIntoView({ behavior: "smooth" });
+}
 
-            for (let i = 0; i < particles.length; i++) {
-                particles[i].update();
-                particles[i].draw();
-                for (let j = i + 1; j < particles.length; j++) {
-                    const dx = particles[i].x - particles[j].x;
-                    const dy = particles[i].y - particles[j].y;
-                    const dist = Math.sqrt(dx * dx + dy * dy);
-                    if (dist < 180) {
-                        ctx.strokeStyle = `rgba(${triRGB}, ${0.3 * (1 - dist / 180)})`;
-                        ctx.lineWidth = 1 - (dist / 180);
-                        ctx.beginPath();
-                        ctx.moveTo(particles[i].x, particles[i].y);
-                        ctx.lineTo(particles[j].x, particles[j].y);
-                        ctx.stroke();
-                    }
-                }
-            }
-            requestAnimationFrame(renderEngine);
-        }
+function rotateTheme() {
+    themeIndex = (themeIndex + 1) % themes.length;
+    document.documentElement.setAttribute("data-theme", themes[themeIndex]);
+}
 
-        function handleScroll() {
-            const winScroll = document.documentElement.scrollTop;
-            const height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
-            const scrolled = (winScroll / height) * 100;
-            progressBar.style.width = scrolled + "%";
-            document.getElementById('scroll-top-btn').classList.toggle('visible', winScroll > 500);
-            header.classList.toggle('scrolled', winScroll > 50);
-        }
-
-        function jumpTo(id) {
-            const el = document.getElementById(id);
-            if(el) el.scrollIntoView({ behavior: "smooth" });
-        }
-
-        function toggleTheme() {
-            currentTheme = currentTheme === 'dark' ? 'light' : 'dark';
-            document.documentElement.setAttribute('data-theme', currentTheme);
-        }
-
-        function modalCtrl(state) {
-            modalOverlay.classList.toggle('active', state);
-            mainView.classList.toggle('is-blurred', state);
-        }
-
-        function triggerToast(msg) {
-            const toast = document.getElementById('toast');
-            toast.textContent = msg;
-            toast.classList.add('active');
-            setTimeout(() => toast.classList.remove('active'), 3000);
-        }
-
-        function setupIntersectionObservers() {
-            const observer = new IntersectionObserver((entries) => {
-                entries.forEach(entry => {
-                    if (entry.isIntersecting) {
-                        entry.target.classList.add('visible');
-                        const id = entry.target.parentElement.id;
-                        document.querySelectorAll('.dot').forEach(dot => {
-                            dot.classList.toggle('active', dot.getAttribute('data-ref') === id);
-                        });
-                    }
+function setupIntersectionObservers() {
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach((entry) => {
+            if (entry.isIntersecting) {
+                entry.target.classList.add("visible");
+                const id = entry.target.parentElement.id;
+                document.querySelectorAll(".dot").forEach(dot => {
+                    dot.classList.toggle("active", dot.getAttribute("data-ref") === id);
                 });
-            }, { threshold: 0.2 });
-            document.querySelectorAll('.hero-block').forEach(block => observer.observe(block));
-        }
-
-        function processLogin(e) {
-            e.preventDefault();
-            triggerToast("Neural Link Established");
-            setTimeout(() => {
-                modalCtrl(false);
-                document.getElementById('user-panel').style.display = 'block';
-            }, 1000);
-        }
-
-        function terminateSession() {
-            document.getElementById('user-panel').style.display = 'none';
-            triggerToast("Session Terminated");
-        }
-    </script>
+            }
+        });
+    }, { threshold: 0.3 });
+    document.querySelectorAll(".hero-block").forEach(block => observer.observe(block));
+}
+</script>
 </body>
 </html>
