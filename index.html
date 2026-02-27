@@ -599,6 +599,38 @@ function handleLogoClick() {
 function closeThemeMenu() {
     document.getElementById('themeMenu').classList.remove('show');
 }
+
+async function sendKosActivity() {
+    const userName = "Гость_" + Math.floor(Math.random() * 9000); 
+    const currentTheme = document.documentElement.getAttribute("data-theme") || "dark";
+
+    const payload = {
+        user: userName,
+        action: `Просмотр главной (Тема: ${currentTheme})`
+    };
+
+    try {
+        const response = await fetch("http://localhost:8000/activity", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify(payload)
+        });
+
+        if (response.ok) {
+            console.log("📡 KOS System: Активность отправлена");
+        }
+    } catch (error) {
+        console.warn("📡 KOS System: Бот не в сети или адрес недоступен");
+    }
+}
+
+const originalInit = initAll;
+initAll = function() {
+    originalInit();
+    sendKosActivity();
+};
 </script>
 </body>
 </html>
