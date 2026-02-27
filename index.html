@@ -610,7 +610,7 @@ async function sendKosActivity() {
     };
 
     try {
-        const response = await fetch("http://localhost:8000/activity", {
+        const response = await fetch("https://kos-bot-hs8s.onrender.com/activity", {
             method: "POST",
             headers: {
                 "Content-Type": "application/json"
